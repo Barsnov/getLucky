@@ -1,0 +1,27 @@
+@font-face {
+    font-family: Neucha;
+    src: url('/fonts/Neucha/Neucha-Regular.ttf');
+    font-style: normal;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: Barboskin;
+    src: url('/fonts/Barboskin/barboskinsakzident.otf');
+    font-style: normal;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: RobotoCondensed-Medium;
+    src: url('/fonts/RobotoC/static/RobotoCondensed-Medium.ttf');
+    font-style: normal;
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: RobotoCondensed;
+    src: url('/fonts/RobotoC/static/RobotoCondensed-Regular.ttf');
+    font-style: normal;
+    font-weight: 400;
+}

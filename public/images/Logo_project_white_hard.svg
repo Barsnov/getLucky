@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_Слой_2" data-name="Слой 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 216.57">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        font-family: Montserrat-Medium, Montserrat;
+        font-size: 29.27px;
+        font-weight: 500;
+      }
+
+      .cls-3 {
+        letter-spacing: 0em;
+      }
+
+      .cls-4 {
+        letter-spacing: -.05em;
+      }
+
+      .cls-5 {
+        letter-spacing: -.05em;
+      }
+
+      .cls-6 {
+        letter-spacing: -.05em;
+      }
+
+      .cls-7 {
+        letter-spacing: -.06em;
+      }
+
+      .cls-8 {
+        letter-spacing: -.07em;
+      }
+
+      .cls-9 {
+        letter-spacing: 0em;
+      }
+
+      .cls-10 {
+        letter-spacing: -.03em;
+      }
+    </style>
+  </defs>
+  <g id="_Слой_1-2" data-name="Слой 1">
+    <g>
+      <g>
+        <path class="cls-1" d="M410.1,132.63c-4.38,0-7.94-3.56-7.94-7.94s3.56-7.94,7.94-7.94,7.94,3.56,7.94,7.94-3.56,7.94-7.94,7.94ZM410.1,119.13c-3.07,0-5.56,2.5-5.56,5.56s2.5,5.56,5.56,5.56,5.56-2.5,5.56-5.56-2.5-5.56-5.56-5.56Z"/>
+        <polygon class="cls-1" points="410.06 117.67 407.68 117.67 407.88 90.18 410.23 88.82 410.06 117.67"/>
+        <g>
+          <path class="cls-1" d="M382.4,53.53c-2.6-1.63-6.04-.84-7.67,1.76-1.63,2.6-.84,6.04,1.76,7.67,2.6,1.63,6.04.84,7.67-1.76,1.63-2.6.84-6.04-1.76-7.67Z"/>
+          <path class="cls-1" d="M418.25,84.21l-33.83-19.79c-2.56,2.06-6.25,2.39-9.19.54-3.71-2.33-4.83-7.23-2.51-10.94,2.33-3.71,7.23-4.83,10.94-2.51,3.87,2.43,4.46,7.34,2.54,10.98l34.37,20.38,9.91-5.71L298.87,0l-131,76.76,38.18,23.23.2,61.41,92.43,55.16,93.21-55.16v-62.02l15.98-9.2-105.73-61.83,2.58-1.5,104.74,61.48.75.49,8.02-4.6ZM378.97,77.17l-80.2,47.27-13.33-8.48-.2-16.56,37.98-22.63-25.23-14.3-38.86,22.18v46.2l39.38,22.97,66.72-38.87.2,31.31-66.26,39.39-66.26-38.18v-61.7l-14.14-9,80.4-46.66,79.79,47.07Z"/>
+        </g>
+      </g>
+      <text class="cls-2" transform="translate(32.25 117.47)"><tspan class="cls-3" x="0" y="0">ВЕЛИ</tspan><tspan class="cls-10" x="87.97" y="0">К</tspan><tspan class="cls-3" x="107.96" y="0">ИЕ</tspan><tspan class="cls-3" x="-27.11" y="41.14">Т</tspan><tspan class="cls-4" x="-9.6" y="41.14">Р</tspan><tspan class="cls-9" x="9.84" y="41.14">АДИЦИИ</tspan></text>
+      <text class="cls-2" transform="translate(421.96 117.38)"><tspan class="cls-5"><tspan x="0" y="0">НОВЫЕ</tspan></tspan><tspan class="cls-5" x="0" y="41.14">Т</tspan><tspan class="cls-6" x="16.33" y="41.14">Е</tspan><tspan class="cls-8" x="34.25" y="41.14">Х</tspan><tspan class="cls-5" x="51.82" y="41.14">Н</tspan><tspan class="cls-7" x="74.5" y="41.14">О</tspan><tspan class="cls-5" x="97.43" y="41.14">ЛОГИИ</tspan></text>
+    </g>
+  </g>
+</svg>
