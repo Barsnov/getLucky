@@ -2,6 +2,8 @@
 Используется визуальное представление с помощью Web3D технологий + обычного html DOM. На админ-панели стоит защита, где нужно ввести код-безопасности, там добаляются специальности и идёт наполнение её вопросами. Вопросы бывают разных типов. Также используется словарь для составления слов и огромного слова в категории "Cлово-Дел" 
 
 
-Стек: Laravel(php), Vue(Option.api + Composition.api), tailwind.css
+Стек: Laravel(php), Vue(Option.api + Composition.api), tailwind.css, Inertia.js
+
 Языки: js, html, css3
+
 Библиотеки: swiper.js, howler.js, markdown-it, three.js, tresJS
