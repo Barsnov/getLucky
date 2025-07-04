@@ -8,9 +8,8 @@ import { extend, useLoop, useTres } from '@tresjs/core'
 import {shallowRef} from 'vue'
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass'
+
 extend({ ShaderPass })
-
-
 extend({ EffectComposer, OutputPass, UnrealBloomPass, RenderPass })
 const { camera, renderer, scene, sizes} = useTres()
 

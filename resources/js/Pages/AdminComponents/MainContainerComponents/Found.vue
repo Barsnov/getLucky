@@ -26,6 +26,18 @@ const renderMarkdown = (text) => {
     return typeof text === 'string' ? md.render(text) : '';
 }
 
+const isImageModalOpen = ref(false);
+const selectedImageUrl = ref("");
+
+const openImage = (url) => {
+    selectedImageUrl.value = url;
+    isImageModalOpen.value = true;
+};
+
+const closeImage = () => {
+    isImageModalOpen.value = false;
+    selectedImageUrl.value = "";
+};
 
 const openMenuIndex = ref(false);
 const visible = ref(false);
@@ -111,7 +123,7 @@ onMounted(() => {
                         <path d="M18 12H6" stroke="black" stroke-width="1.6" stroke-linecap="round" class="my-path">
                         </path>
                     </svg>
-                    <p class="text-sm -ms-1 mb-0.5 font-medium">Добавить карточку "Найди меня!"</p>
+                    <p class="text-sm -ms-1 -mb-0.5 font-medium">Добавить карточку "Найди меня!"</p>
                     <ChevronUpIcon
                         class="col-start-1 row-start-1 size-4 mt-0.5 self-center justify-self-end text-gray-500 sm:size-4 rotate-180"
                         aria-hidden="true"/>
@@ -121,7 +133,7 @@ onMounted(() => {
                      class="flex items-center gap-2 bg-gray-200 px-4 placeholder-gray-600 rounded-full">
                     <img :src="'/images/Search.svg'" class="w-4 h-4" alt="Загрузка">
                     <input v-model="searchInput"
-                           class="bg-gray-200 text-base outline-0 focus:outline-0 border-none w-full"
+                           class="roboto bg-gray-200 text-base outline-0 focus:outline-0 border-none w-full"
                            placeholder="Искать..."
                            type="text">
                 </div>
@@ -132,8 +144,8 @@ onMounted(() => {
                             class="flex justify-between border border-gray-800 w-full cursor-default rounded-md bg-white py-1.5 pr-2 pl-3 text-left text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                             <div class="flex items-center gap-1">
                                 <span class="flex items-center">
-                                    <span class="block text-base truncate">Сортировка: <span
-                                        class="ms-1 text-base font-medium">{{ sort.name }}</span></span>
+                                    <span class="roboto block text-base truncate">Сортировка: <span
+                                        class="roboto ms-1 text-base font-medium">{{ sort.name }}</span></span>
                                 </span>
                                 <svg v-if="sort.type === 1" width="20px" height="20px" viewBox="0 0 24 24" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
@@ -163,10 +175,10 @@ onMounted(() => {
                                 class="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white text-base ring-1 ring-black/5 focus:outline-hidden sm:text-sm">
                                 <ListboxOption as="template" v-for="(sorting, index) in typeSort" :key="sorting.id"
                                                :value="sorting" v-slot="{ active, selected }">
-                                    <li :class="[active ? 'bg-indigo-600 text-white outline-hidden' : 'text-gray-900', 'relative cursor-default py-2 pr-9 pl-3 select-none']">
+                                    <li :class="[active ? 'bg-indigo-300 text-white outline-hidden' : 'text-gray-900', 'relative cursor-default py-2 pr-9 pl-3 select-none']">
                                         <div class="flex items-center">
                                             <span
-                                                :class="[selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate']">{{
+                                                :class="[selected ? 'font-semibold' : 'font-normal', 'roboto ml-3 block truncate']">{{
                                                     sorting.name
                                                 }}</span>
                                         </div>
@@ -206,11 +218,11 @@ onMounted(() => {
                            class="shadow-xl rounded-xl w-full text-left border-gray-800 table-auto border-collapse">
                         <thead>
                         <tr class="bg-gray-700 text-xl">
-                            <th class="w-3/12 text-white rounded-ss-xl px-5 py-4">Вопрос</th>
-                            <th class="w-3/12 text-white px-5 py-4">Картинка-вопрос</th>
-                            <th class="w-3/12 text-white px-5 py-4">Картинка-ответ</th>
-                            <th class="w-2/12 text-white px-5 py-4">Последнее изменение</th>
-                            <th class="w-1/12 text-white rounded-se-xl px-5 py-4"></th>
+                            <th class="roboto font-normal w-3/12 text-white rounded-ss-xl px-5 py-4">Вопрос</th>
+                            <th class="roboto font-normal w-3/12 text-white px-5 py-4">Картинка-вопрос</th>
+                            <th class="roboto font-normal w-3/12 text-white px-5 py-4">Картинка-ответ</th>
+                            <th class="roboto font-normal w-2/12 text-white px-5 py-4">Последнее изменение</th>
+                            <th class="roboto font-normal w-1/12 text-white rounded-se-xl px-5 py-4"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -221,10 +233,10 @@ onMounted(() => {
                                 class="border-gray-800 px-5 py-3">
                                 <div class="prose prose-lg scroll-container overflow-y-scroll mt-1 max-h-[8rem] p-2 rounded break-words max-w-none" v-html="renderMarkdown(item.question)"></div>
                             </td>
-                            <td class="border-gray-800 px-5 py-3">
+                            <td @click.stop="openImage('/storage/' + item.urlQuestion)"  class="border-gray-800 px-5 py-3">
                                 <img class="h-[10rem] object-cover rounded-2xl" :src="'/storage/' + item.urlQuestion" alt="">
                             </td>
-                            <td class="border-gray-800 px-5 py-3">
+                            <td @click.stop="openImage('/storage/' + item.urlAnswer)" class="border-gray-800 px-5 py-3">
                                 <img class="h-[10rem] object-cover rounded-2xl" :src="'/storage/' + item.urlAnswer" alt="">
                             </td>
                             <td class="px-5 py-3">
@@ -243,9 +255,7 @@ onMounted(() => {
 
                             <td :class="index + 1 === contentComputed.length ? 'rounded-ee-xl' : ''"
                                 class="text-right relative px-5 py-3">
-                                <button
-                                    @click.stop="() => {openMenuIndex !== index ?  openMenuIndex = index: openMenuIndex = null}"
-                                    class="p-0.5 px-3 rounded hover:bg-gray-100 font-black text-xl">
+                                <button @click.stop="() => {openMenuIndex !== index ?  openMenuIndex = index: openMenuIndex = null}" class="p-0.5 px-3 rounded hover:bg-gray-100 font-black text-xl">
                                     ⋮
                                 </button>
 
@@ -255,11 +265,11 @@ onMounted(() => {
                                     <ul class="">
                                         <!--<li class="px-4 py-2 text-gray-900 text-base font-medium hover:bg-blue-200 cursor-pointer rounded-t-md">Переименовать</li>-->
                                         <li @click.stop="update(item)"
-                                            class="border-b border-gray-800 px-4 py-2 text-gray-900 text-base font-medium hover:bg-yellow-200 cursor-pointer rounded-t-md">
+                                            class="roboto border-b border-gray-800 px-4 py-2 text-gray-900 text-base font-medium hover:bg-yellow-200 cursor-pointer rounded-t-md">
                                             Изменить
                                         </li>
                                         <li @click.stop="del(item)"
-                                            class="border px-4 py-2 text-gray-900 text-base font-medium hover:bg-red-200 cursor-pointer rounded-b-md">
+                                            class="roboto border px-4 py-2 text-gray-900 text-base font-medium hover:bg-red-200 cursor-pointer rounded-b-md">
                                             Удалить
                                         </li>
                                     </ul>
@@ -272,6 +282,21 @@ onMounted(() => {
             </div>
         </div>
     </div>
+
+    <!--Full‑screen image modal -->
+    <transition name="fade">
+        <div v-if="isImageModalOpen" class="fixed inset-0 bg-black bg-opacity-90 z-[100] flex items-center justify-center"
+            @click="closeImage">
+            <!-- Close button -->
+            <button class="absolute top-6 right-8 text-white text-4xl font-bold hover:scale-110 transition-transform cursor-pointer" @click.stop="closeImage">
+                &times;
+            </button>
+
+            <!-- Image -->
+            <img :src="selectedImageUrl" class="max-w-[95vw] max-h-[95vh] object-contain rounded-2xl shadow-2xl cursor-zoom-out" @click.stop
+                alt="Preview"/>
+        </div>
+    </transition>
 </template>
 
 <style scoped>
@@ -308,5 +333,18 @@ onMounted(() => {
 
 .scroll-container::-webkit-scrollbar-thumb {
     transition: background-color 0.3s ease;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.2s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
+.roboto{
+    font-family: 'RobotoCondensed', sans-serif;
 }
 </style>

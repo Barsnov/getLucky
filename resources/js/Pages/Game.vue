@@ -3,12 +3,12 @@
     <div ref="game" @click="startGame" class="w-screen h-screen overflow-hidden relative" :style="!selectCard ? `cursor: url('/icons/Point.png') 0 0, auto` : `cursor: url('/icons/Default.png') 0 5, auto`"
          :class="opacityGame ? 'opacity-100' : 'opacity-0'" style="transition: 2s">
         <!--Игровое поле-->
-        <game-u-i @hexStatsUpdate="hexStatsUpdate" @getFight="getFight" @getQuestion="getQuestion" ref="gameUI" :highlightedIndex="highlightedIndex"
+        <game-u-i @getQuestionForUpHex="getQuestionForUpHex" @hexStatsUpdate="hexStatsUpdate" @getFight="getFight" @getQuestion="getQuestion" ref="gameUI" :highlightedIndex="highlightedIndex"
                   :startGameIf="startGameIf" @update-current-player="updateCurrentPlayer" :players="players"></game-u-i>
         <!--Дуэль-->
         <Fight :attacker="attacker" :defender="defender" @gameOver="FightOver" :question="question" :visibleFight="visibleFight"/>
         <!--Вопросы действия задачки-->
-        <Questions ref="questions" @addPoints="addPoints" @closeQuestion="closeQuestion" :question="question" :visibleQuestion="visibleQuestion"/>
+        <Questions ref="questions" @closeQuestionForUpHex="closeQuestionForUpHex" @closeQuestion="closeQuestion" :forUpHex="forUpHex" :question="question" :visibleQuestion="visibleQuestion"/>
         <!--Карточки выбора очерёдности-->
         <div :class="visibleCard ? 'opacity-100 z-50' : 'opacity-0 -z-10'"
              class="w-max absolute flex flex-col items-center gap-20 top-1/2 left-1/2 transition-all duration-1000" style="transform: translate(-50%, -50%)">
@@ -31,9 +31,10 @@
             </div>
         </div>
         <!--Активная фишка?-->
-        <div :class="startGameIf ? 'opacity-100' : 'opacity-0'" class="transition-all text-4xl duration-1000 absolute top-12 left-1/2 text-white z-30"
+        <div :class="[startGameIf ? 'opacity-100' : 'opacity-0', !visibleQuestion ? 'text-white' : 'text-gray-900']"
+             class="transition-all text-4xl duration-1000 absolute top-8 left-1/2 z-30"
              style="transform: translate(-50%); font-family: 'Barboskin', serif">
-            Ходят:
+            Очередь:
             <span class="" v-if="currentPlayer" :style="{ color: currentColor }" style="font-family: 'Barboskin', serif">
                 {{ currentPlayer.name }}
             </span>
@@ -47,9 +48,9 @@
         <Link class="absolute left-4 top-4 w-[7rem] z-20 ms-3 text-white" href="/"><img class="text-white cursor-pointer" :src="'/images/Logo_project_white_simple.svg'" alt="project_logo"></Link>
         <!--Таймер + чёрный фон-->
         <div :class="['z-50 transition-all duration-1000 ease-in-out flex items-center justify-center',
-         timerGameEnd ? 'fixed top-0 left-0 w-screen h-screen bg-black' : 'absolute top-4 right-4 bg-black/70 rounded-xl p-4',
+         timerGameEnd ? 'fixed top-0 left-0 w-screen h-screen bg-black' : 'absolute top-4 right-4 bg-black/85 rounded-lg p-4',
          timerGameEnd ? 'opacity-100' : 'opacity-0 sm:opacity-100']">
-            <h2 style="font-family: 'Barboskin', sans-serif" :class="['text-5xl', timerGameEnd ? 'text-9xl text-white' : 'w-[25rem] text-center', isBlinking ? 'animate-pulse text-red-600' : (remainingTime <= 300 ? 'text-red-500' : 'text-white')]">
+            <h2 style="font-family: 'Barboskin', sans-serif" :class="['text-4xl', timerGameEnd ? 'text-9xl text-white' : 'w-[18rem] text-center', isBlinking ? 'animate-pulse text-red-600' : (remainingTime <= 300 ? 'text-red-500' : 'text-white')]">
                 {{ timerGameEnd ? 'Игра окончена!' : `Осталось: ${formatTime(remainingTime)}` }}
             </h2>
         </div>
@@ -134,8 +135,8 @@ export default {
 
             //Таймер
             gameStartTime: Date.now(),
-            gameDuration: 45 * 60 * 1000, // 30 минут в миллисекундах
-            remainingTime: 45 * 60, // в секундах
+            gameDuration: .2 * 60 * 1000, // 30 минут в миллисекундах
+            remainingTime: .2 * 60, // в секундах
             timerInterval: null,
             gameOver: false,
             //Очки за клетки
@@ -157,6 +158,9 @@ export default {
             volumeBack: 0.1,
             currentIndex: 0,
             currentSound: null,
+
+            //Улучшение клетки
+            forUpHex: false
         }
     },
 
@@ -205,8 +209,8 @@ export default {
         },
         //Логика с вопросами
         getQuestion(){
-            this.visibleQuestion = !this.visibleQuestion
             this.getRandomQuestion();
+            this.visibleQuestion = true
         },
         getRandomQuestion() {
             const categoryWeights = {
@@ -254,6 +258,7 @@ export default {
             this.question = categoryArray[randomIndex]
             this.question.category = selectedCategory
             this.randomCategory = selectedCategory
+            console.log(this.randomCategory)
 
             // Удаляем вопрос
             this[selectedCategory].splice(randomIndex, 1)
@@ -265,9 +270,11 @@ export default {
             }, 1000);
         },
         closeQuestion(bool, point){
-            this.visibleQuestion = !this.visibleQuestion
+            this.visibleQuestion = false
             if(bool){
                 this.addPoints(this.currentPlayer.id, point); // Победителю — очки
+            }else{
+                this.addPoints(this.currentPlayer.id, 5); // Победителю — очки
             }
             this.$refs.gameUI.nextPlayerTurn();
         },
@@ -279,6 +286,24 @@ export default {
             this.lucky = questions.lucky || [];
             this.tf = questions.tf || [];
             this.word = questions.word || [];
+        },
+
+        //Улучшение клетки
+        getQuestionForUpHex(){
+            this.getRandomQuestion();
+            this.forUpHex = true;
+            this.visibleQuestion = true;
+        },
+        closeQuestionForUpHex(bool, point){
+            this.forUpHex = false;
+            this.visibleQuestion = false
+            if(bool){
+                this.addPoints(this.currentPlayer.id, point); // Победителю — очки
+                this.$refs.gameUI.questionForUpHex();
+            }else{
+                this.addPoints(this.currentPlayer.id, 5); // Победителю — очки
+                this.$refs.gameUI.nextTurn();
+            }
         },
         //Очки
         hexStatsUpdate(value){
@@ -334,6 +359,7 @@ export default {
         endGame() {
             // Экран завершения и т.д.
             this.timerGameEnd = true
+            this.stopPlaylist()
             this.$refs.lead.getPLayers()
         },
         formatTime(seconds) {

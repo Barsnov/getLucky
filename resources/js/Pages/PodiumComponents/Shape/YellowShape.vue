@@ -7,7 +7,7 @@ const { scene: model } = await useGLTF(
 </script>
 
 <template>
-    <primitive :object="model"
+    <primitive :object="model" cast-shadow receive-shadow
                :scale="[0.2, 0.2, 0.2]"
     />
 </template>

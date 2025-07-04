@@ -16,7 +16,7 @@ import CrownShape from "./CrownShape.vue";
 import {Howl} from "howler";
 
 extend({ OrbitControls });
-const emit = defineEmits(['update-current-player', 'getQuestion', 'getFight', 'hexStatsUpdate'])
+const emit = defineEmits(['update-current-player', 'getQuestion', 'getFight', 'hexStatsUpdate', 'getQuestionForUpHex'])
 const props = defineProps({
     players: Number,
     startGameIf: Boolean,
@@ -194,7 +194,7 @@ const HexClick = (hex) =>{
             }else{
                 if (hex.immune) return;
                 //Определение защищающейся команды
-                // isHexClickable.value = false;
+                isHexClickable.value = false;
                 const surfaceHex = `#${hex.surfaceColor.getHexString()}`
                 const defenderIndex = playerColors.findIndex(
                     color => color.toLowerCase() === surfaceHex.toLowerCase()
@@ -226,12 +226,14 @@ const HexClick = (hex) =>{
     }
 }
 const updateHex = (hex) =>{
-    console.log(hex);
     if (!isHexClickable.value) return;
     if (hex.occupied){
         if (currentPlayerIndex.value === hex.ownerId){
-            if(hex.busy !== null){
-                console.log('hi')
+            if(hex.busy !== null && !hex.immune){
+                setTimeout(() => {
+                    emit('getQuestionForUpHex')
+                    hexActiveTurn.value = hex
+                }, 400);
             }
         }
     }
@@ -319,6 +321,23 @@ const nextPlayerTurn = (duelWinner = null) =>{
     setTimeout(() => {
         nextTurn();
     }, 400);
+}
+
+const questionForUpHex = () =>{
+    isHexClickable.value = true;
+    const hex = hexActiveTurn.value
+    hex.immune = true // 🛡️ Добавляем иммунитет к атаке после победы
+    hex.beamColor = hex.surfaceColor
+
+    resetHex(hex)
+    reachableHexes.value.forEach(h => !h.occupied ? h.surfaceColor = new THREE.Color('rgb(56,56,56)') : '');
+    reachableHexes.value = []
+    isMovePhase.value = false
+
+    // Просто переход хода
+    setTimeout(() => {
+        nextTurn()
+    }, 400)
 }
 //Курсор-поинтер при наведении на поле
 const canvasRef = shallowRef(null)
@@ -555,6 +574,7 @@ const nextTurn = () => {
     });
     isMovePhase.value = true;
 }
+
 const activeCrownPosition = computed(() => positionShape.value[props.players-2][currentPlayerIndex.value])
 
 watch(() => props.highlightedIndex, (value)=>{
@@ -570,15 +590,17 @@ onMounted(()=>{
 
 defineExpose({
     nextPlayerTurn,
+    nextTurn,
+    questionForUpHex
 })
 </script>
 
 <template>
     <!-- preset="realistic"-->
-    <TresCanvas ref="canvasRef" :clear-color="'rgb(17,13,14)'" window-size :antialias="true">
+    <TresCanvas shadows ref="canvasRef" :clear-color="'rgb(60,42,46)'" window-size :antialias="true">
         <!--<OrbitControls/>-->
         <CameraAnimation :startGameIf="startGameIf" :targetPosition="positionShape[players-2][currentPlayerIndex]"></CameraAnimation>
-        <TresAmbientLight :intensity=".5" />
+        <TresAmbientLight :intensity=".5"/>
         <TresDirectionalLight :position="[0, 100, 0]" :intensity="2" :look-at="[0, 0, 0]" cast-shadow/>
         <TresGroup>
             <TresMesh @click="() => HexClick(hex)" v-for="(hex, index) in hexGrid" :key="index" :position="[hex.position.x, hex.position.y, hex.position.z]" receive-shadow

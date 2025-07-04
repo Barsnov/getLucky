@@ -22,7 +22,7 @@ export default defineConfig({
         port: 8001,       // Порт для Vite
         strictPort: true,
         hmr: {
-            host: '192.168.100.28', // ipconfig
+            host: '192.168.0.11', // ipconfig
         }
     }
 });

@@ -2,10 +2,10 @@
 import { useGLTF } from '@tresjs/cientos'
 
 const { scene: model} = await useGLTF(
-    '/shapes/Red_shape.gltf', {draco: true},
+    '/shapes/Red_shape.gltf',
 )
 </script>
 
 <template>
-    <primitive :object="model" :scale="[0.2, 0.2, 0.2]"/>
+    <primitive cast-shadow receive-shadow :object="model" :scale="[0.2, 0.2, 0.2]"/>
 </template>

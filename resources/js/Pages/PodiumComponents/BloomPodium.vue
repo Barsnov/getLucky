@@ -40,7 +40,7 @@ useLoop().render(() => {
             attach="passes-0"
         />
         <TresUnrealBloomPass
-            :args="[undefined, 0.3, .01, 0]"
+            :args="[undefined, .2, .01, 0]"
             attach="passes-1"
         />
         <TresOutputPass

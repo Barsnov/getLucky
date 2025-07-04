@@ -58,7 +58,7 @@ defineExpose({
 
         <div :class="active && update ? 'opacity-100 flex flex-col gap-8' : 'hidden opacity-0'" class="transition-all duration-500">
             <div class="border-b-2 border-gray-400 pb-4 px-4">
-                <div @click="closeRight" class="cursor-pointer">
+                <div @click="closeRight" class="roboto cursor-pointer">
                     <img alt="" class="w-8 h-8 -scale-x-100" :src="'/images/Back_arrow.png'">
                     {{ activeCard }}
                 </div>
@@ -74,12 +74,12 @@ defineExpose({
                     <p v-if="activeCard === 'Specialization'" class="text-gray-600 text-sm">
                         Тип генерации: {{ content?.method === 0 ? 'Из базы' : 'Генеративный' }}
                     </p>
-                    <p v-if="activeCard === 'Lucky'" class="text-gray-600 text-sm">
+                    <p v-if="activeCard === 'Lucky'" class="text-gray-700 text-sm">
                         Количество очков: {{ content?.points }}
                     </p>
                 </div>
 
-                <div class="mt-4">
+                <div class="mt-4 roboto text-gray-700 text-sm">
                     {{ content }}
                 </div>
             </div>
@@ -116,5 +116,9 @@ defineExpose({
 
 .scroll-container::-webkit-scrollbar-thumb {
     transition: background-color 0.3s ease;
+}
+
+.roboto{
+    font-family: 'RobotoCondensed', sans-serif;
 }
 </style>

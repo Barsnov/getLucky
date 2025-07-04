@@ -1,7 +1,7 @@
 <script setup>
+import {computed, ref, toRaw, unref, watch} from "vue";
 import MarkdownIt from "markdown-it";
 import markdownItMark from "markdown-it-mark";
-import {computed, ref, watch, unref, toRaw} from "vue";
 
 const md = new MarkdownIt({
     html: false,
@@ -9,34 +9,43 @@ const md = new MarkdownIt({
     typographer: true,
     breaks: true
 }).use(markdownItMark)
-const props = defineProps({
-    question:{
-        type: Object,
-        required: true,
-        default: []
-    },
-    visibleFight: Boolean,
-    attacker: Object,
-    defender: Object,
-})
-const emit = defineEmits([
-    'gameOver'
-])
 const renderMarkdown = (text) => {
     return typeof text === 'string' ? md.render(text) : '';
 }
 
+const props = defineProps({
+    question: {
+        type: Object,
+        required: true,
+        default: []
+    },
+
+    visibleFight: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    attacker: Object,
+    defender: Object,
+})
+
+const emit = defineEmits([
+    'gameOver'
+])
+
+const phase = ref('prepare') // prepare | input | bonus | end
+const timer = ref(60) // seconds
+const interval = ref()
+
 const continueGame = ref(false)
-const checkAnswer = ref(false)
 const inputWord = ref('');
 const team1Words = ref([]);
 const errorMessage = ref('');
 const team2Words = ref([]);
 const currentTeam = ref(1);
 
-const phase = ref('prepare') // prepare | input | bonus | end
-const timer = ref(60) // seconds
-const interval = ref()
+const checkAnswer = ref(false);
+const flagButton = ref(false);
 
 const winningTeam = computed(() => {
     if (phase.value !== 'end') return null
@@ -144,10 +153,14 @@ const addPoints = () => {
     this.$emit('addPoints', this.question.points)
 }
 const closeFight = (team) => {
+    if (flagButton.value) return;
+    flagButton.value = true
+
     emit('gameOver', team)
     setTimeout(()=>{
         continueGame.value = false;
         checkAnswer.value = false;
+        errorMessage.value = '';
     }, 1000)
 }
 
@@ -164,15 +177,11 @@ const categoryGame = computed(() => {
 </script>
 
 <template>
-    <div
-        class="absolute bg-gradient-to-r from-fuchsia-500 via-pink-400 to-blue-500 w-full h-full flex flex-col justify-center gap-10 transition-all duration-300"
-        :class="visibleFight  ? 'opacity-100 z-40' : 'opacity-0 -z-10'">
+    <div class="absolute bg-[#bde0ff] w-full h-full flex flex-col justify-center gap-10 transition-all duration-1000"
+         :class="visibleFight  ? 'opacity-100 z-40' : 'opacity-0 -z-10'">
         <!--Тип вопроса-->
         <h1 class="absolute text-white left-7 top-12 text-4xl text-center font-medium"
-            style="font-family: 'Barboskin', serif">
-            Категория:
-            <span style="font-family: 'Barboskin', serif"
-                  class="text-white text-4xl underline-offset-4 underline uppercase">{{ categoryGame }}</span>
+            style="font-family: 'Barboskin', serif">Категория: <span style="font-family: 'Barboskin', serif" class="text-white text-4xl underline-offset-4 underline uppercase">{{ categoryGame }}</span>
         </h1>
         <div class="flex flex-col w-10/12 items-center">
             <div v-if="question.category === 'cardFound'"
@@ -191,9 +200,9 @@ const categoryGame = computed(() => {
                          v-html="renderMarkdown(checkAnswer && question?.category === 'word' ? question?.explanation : question?.question)">
                     </div>
                     <img v-if="!checkAnswer && question?.category === 'cardFound'"
-                         :src="'/storage/' + question.urlQuestion">
+                         :src="'/storage/' + question.urlQuestion" alt="">
                     <div v-if="checkAnswer" class="w-full flex items-end gap-3">
-                        <img v-if="question?.category === 'cardFound'" :src="'/storage/' + question.urlAnswer">
+                        <img v-if="question?.category === 'cardFound'" :src="'/storage/' + question.urlAnswer" alt="">
                     </div>
                 </div>
             </div>
@@ -223,8 +232,8 @@ const categoryGame = computed(() => {
                             <h1 class="text-4xl barboskin text-gray-900 font-bold text-center">{{ phaseLabel }}</h1>
                         </div>
                         <input :class="phase === 'input' ? 'opacity-100' : 'opacity-0'" v-model="inputWord"
-                            @keydown.enter.prevent="submitWord" placeholder="Введите слово"
-                            class="barboskin border-2 transition-all duration-500 border-gray-900 px-4 py-2 rounded w-[30rem] text-3xl"/>
+                               @keydown.enter.prevent="submitWord" placeholder="Введите слово"
+                               class="barboskin border-2 transition-all duration-500 border-gray-900 px-4 py-2 rounded w-[30rem] text-3xl"/>
                         <p v-if="errorMessage" class="text-3xl barboskin text-wrap text-center text-red-500 mt-1">
                             {{ errorMessage }}</p>
 
@@ -251,24 +260,50 @@ const categoryGame = computed(() => {
             </div>
 
             <div class="absolute flex items-center gap-16" style="bottom: 2rem;">
-                <div v-if="!checkAnswer && question.category !== 'word'"
-                     class="border-4 border-b-[.7rem] hover:border-b-4 transition-all bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 rounded-2xl px-6 py-4"
-                     @click="checkAnswer = true" style="cursor: url('/icons/Point.png') 20 20, auto">
-                    <h1 class="text-4xl text-white" style="font-family: 'Barboskin', sans-serif;">Проверить ответ</h1>
+                <div :class="!checkAnswer && question.category !== 'word' ? 'opacity-100 relative' : 'opacity-0 absolute -z-10'"
+                     class="overflow-hidden bg-gray-600 w-[29rem] text-center border-gray-800 border-b-[.6rem] hover:border-b-[.2rem] transition-all rounded-lg px-6 py-4 group"
+                     @click="(() => { checkAnswer = true })" style="cursor: url('/icons/Point.png') 0 0, auto">
+                    <h1 style="font-family: 'Barboskin', sans-serif;" class="text-3xl text-white">
+                        Проверить ответ
+                    </h1>
+                    <!-- Блик -->
+                    <div class="absolute top-0 left-[-50%] w-[100%] h-full bg-white/20 transform rotate-[15deg] scale-150 transition-all blur-sm duration-1000 group-hover:left-[130%] pointer-events-none"></div>
                 </div>
 
                 <!-- После проверки: "Пропустить" и "+ Очки" -->
                 <template class="flex" v-if="checkAnswer || question.category === 'word'">
-                    <div :class="phase === 'input' ? 'opacity-100' : 'opacity-0'" class="bg-gradient-to-r from-green-600 via-purple-700 w-[26rem] text-center to-blue-500 border-4 border-b-[.7rem] hover:border-b-4 transition-all border-white rounded-2xl px-6 py-4"
-                        @click="closeFight(defender)"
-                        style="cursor: url('/icons/Point.png') 0 0, auto">
-                        <h1 style="font-family: 'Barboskin', sans-serif;" class="text-4xl text-white">Победили {{defender.name}}</h1>
+                    <div :class="[question.category === 'word' ? (phase === 'input' ? 'opacity-100' : 'opacity-0 absolute -z-10') : 'opacity-100',
+                            {
+                                'bg-gradient-to-r from-red-500 to-red-300': defender.name === 'Красные',
+                                'bg-gradient-to-r from-blue-500 to-blue-300': defender.name === 'Синие',
+                                'bg-gradient-to-r from-green-500 to-green-300': defender.name === 'Зелёные',
+                                'bg-gradient-to-r from-yellow-500 to-yellow-200': defender.name === 'Жёлтые',
+                                'bg-gradient-to-r from-violet-500 to-violet-300': defender.name === 'Фиолетовые',
+                            }]"
+                         class="relative overflow-hidden bg-pink-500 w-[29rem] text-center border-gray-800 border-b-[.6rem] hover:border-b-[.2rem] transition-all rounded-lg px-6 py-4 group"
+                         @click="closeFight(defender)" style="cursor: url('/icons/Point.png') 0 0, auto">
+                        <h1 style="font-family: 'Barboskin', sans-serif;" class="text-3xl text-gray-950">
+                            Победили {{defender.name}}
+                        </h1>
+                        <!-- Блик -->
+                        <div class="absolute top-0 left-[-30%] w-[40%] h-full bg-white/80 transform rotate-[45deg] scale-125 transition-all duration-700 group-hover:left-[90%] pointer-events-none"></div>
                     </div>
 
-                    <div :class="phase === 'input' ? 'opacity-100' : 'opacity-0'" class="bg-gradient-to-r from-purple-600 via-pink-500 w-[26rem] text-center to-red-500 border-4 border-b-[.7rem] hover:border-b-4 transition-all border-white rounded-2xl px-6 py-4"
-                        @click="closeFight(attacker)"
-                        style="cursor: url('/icons/Point.png') 0 0, auto">
-                        <h1 style="font-family: 'Barboskin', sans-serif;" class="text-4xl text-white">Победили {{attacker.name}}</h1>
+                    <div :class="[question.category === 'word' ? (phase === 'input' ? 'opacity-100' : 'opacity-0 absolute -z-10') : 'opacity-100',
+                            {
+                                'bg-gradient-to-r from-red-500 to-red-300': attacker.name === 'Красные',
+                                'bg-gradient-to-r from-blue-500 to-blue-300': attacker.name === 'Синие',
+                                'bg-gradient-to-r from-green-500 to-green-300': attacker.name === 'Зелёные',
+                                'bg-gradient-to-r from-yellow-500 to-yellow-200': attacker.name === 'Жёлтые',
+                                'bg-gradient-to-r from-violet-500 to-violet-300': attacker.name === 'Фиолетовые',
+                            }]"
+                         class="relative overflow-hidden bg-pink-500 w-[29rem] text-center border-gray-800 border-b-[.6rem] hover:border-b-[.2rem] transition-all rounded-lg px-6 py-4 group"
+                         @click="closeFight(attacker)" style="cursor: url('/icons/Point.png') 0 0, auto">
+                        <h1 style="font-family: 'Barboskin', sans-serif;" class="text-3xl text-gray-950">
+                            Победили {{attacker.name}}
+                        </h1>
+                        <!-- Блик -->
+                        <div class="absolute top-0 left-[-30%] w-[40%] h-full bg-white/80 transform rotate-[45deg] scale-125 transition-all duration-700 group-hover:left-[90%] pointer-events-none"></div>
                     </div>
                 </template>
             </div>
@@ -282,13 +317,10 @@ const categoryGame = computed(() => {
     text-decoration: line-through;
 }
 
-.barboskin {
-    font-family: Barboskin, sans-serif;
-}
-
 .prose * {
     font-family: 'RobotoCondensed', sans-serif;
-    font-size: 1.9rem;
+    font-size: 1.8rem;
+    font-weight: 700;
     text-align: justify;
 }
 
@@ -320,5 +352,17 @@ const categoryGame = computed(() => {
 
 .scroll-container::-webkit-scrollbar-thumb {
     transition: background-color 0.3s ease;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.fade-enter-from, .fade-leave-to {
+    opacity: 0;
+}
+
+.fade-enter-to, .fade-leave-from {
+    opacity: 1;
 }
 </style>

@@ -35,7 +35,7 @@ const openUserModal = () => {
     <div class="w-24 sticky flex flex-col items-center justify-between px-5 py-6 bg-[#24262C]">
         <Link class="w-16" href="/"><img class="text-white cursor-pointer" :src="'/images/Logo_project_white_simple.svg'" alt="project_logo"></Link>
         <div class="flex flex-col gap-6">
-            <div style="font-family: RobotoCondensed, serif" class="flex items-center justify-center px-2 py-3 cursor-pointer rounded text-sm text-white font-bold"
+            <div style="font-family: RobotoCondensed, serif" class="roboto flex items-center justify-center px-2 py-3 cursor-pointer rounded text-sm text-white font-bold"
                  v-for="(link, index) in linksMenu" @click="activeCard = link" :class="index === activeCard.id-1 ? 'bg-fuchsia-400 text-fuchsia-800' : ''" :key="link.id">
                 {{ link.name }}
             </div>
@@ -50,6 +50,8 @@ const openUserModal = () => {
 </template>
 
 <style scoped>
-
+    .roboto{
+        font-family: 'RobotoCondensed', sans-serif;
+    }
 </style>
 

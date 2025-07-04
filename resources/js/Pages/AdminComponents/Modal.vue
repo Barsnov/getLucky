@@ -16,7 +16,7 @@
                                         <ExclamationTriangleIcon class="size-6 text-red-600" aria-hidden="true" />
                                     </div>
                                     <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                        <DialogTitle as="h3" class="text-base font-semibold text-gray-900">Выход из учётной записи</DialogTitle>
+                                        <DialogTitle as="h3" class="roboto text-base font-semibold text-gray-900">Выход из учётной записи</DialogTitle>
                                         <div class="mt-2">
                                             <p class="text-sm text-gray-500">Вы уверены, что хотите выйти из учётной записи? Все несохранённые изменения будут удалены.</p>
                                         </div>
@@ -24,8 +24,8 @@
                                 </div>
                             </div>
                             <div class="bg-fuchsia-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                                <button type="button" class="inline-flex w-full justify-center rounded-md bg-fuchsia-500 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-fuchsia-700 sm:ml-3 sm:w-auto" @click="exit">Выход</button>
-                                <button type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto" @click="open = false" ref="cancelButtonRef">Отмена</button>
+                                <button type="button" class="roboto inline-flex w-full justify-center rounded-md bg-fuchsia-500 px-3 py-2 text-sm font-normal text-white shadow-xs hover:bg-fuchsia-700 sm:ml-3 sm:w-auto" @click="exit">Выход</button>
+                                <button type="button" class="roboto mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-normal text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto" @click="open = false" ref="cancelButtonRef">Отмена</button>
                             </div>
                         </DialogPanel>
                     </TransitionChild>
@@ -46,12 +46,12 @@
                             <div class="bg-white border-b border-gray-300 rounded-t-xl px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                 <div class="sm:flex sm:items-start">
                                     <div class="mt-3 w-full text-center sm:mt-0 sm:text-left">
-                                        <DialogTitle as="h3" class="text-3xl font-black text-gray-800 text-center">Создать {{componentsMap[activeCard].name }}</DialogTitle>
+                                        <DialogTitle as="h3" class="text-3xl font-black text-gray-800 text-center">Создать {{ componentsMap[activeCard].name }}</DialogTitle>
                                         <form @submit.prevent class="flex flex-col gap-4 mt-6">
                                             <!--Название специальности-->
                                             <div v-if="activeCard === 'Specializations' || activeCard === 'Word'" class="flex flex-col gap-2 w-full">
-                                                <label for="name" class="text-base text-gray-800 font-semibold w-full">{{ activeCard === 'Specializations' ? 'Название специальности' : 'Слово'}}</label>
-                                                <input v-model="name" id="name" class="text-base text-gray-950 font-medium border border-gray-800 bg-[#f3f4f6] w-full rounded px-3 py-2">
+                                                <label for="name" class="roboto text-base text-gray-800 font-normal w-full">{{ activeCard === 'Specializations' ? 'Название специальности' : 'Слово'}}</label>
+                                                <input v-model="name" id="name" class="roboto text-base text-gray-950 font-medium border border-gray-800 bg-[#f3f4f6] w-full rounded px-3 py-2">
                                             </div>
                                             <!--Генератор слов-->
                                             <div v-if="activeCard === 'Word' && startGenerating === true" class="">
@@ -63,26 +63,26 @@
                                                     </svg>
                                                 </div>
                                                 <!--Сгенерированные слова-->
-                                                <div v-else-if="words.length !== 0" class="flex w-full overflow-y-scroll scroll-container h-max max-h-[24rem] p-2 flex-wrap gap-2">
+                                                <div v-else-if="words.length !== 0" class="roboto flex w-full overflow-y-scroll scroll-container h-max max-h-[24rem] p-2 flex-wrap gap-2">
                                                 <span v-for="(word, index) in words" :key="index"
-                                                      class="bg-gray-200 text-gray-900 px-3 py-1 pt-0.5 rounded-full text-sm font-medium flex items-center gap-2">
+                                                      class="roboto bg-gray-200 text-gray-900 px-3 py-1 pt-0.5 rounded-full text-sm font-medium flex items-center gap-2">
                                                   {{ word }}
                                                   <button @click="removeWord(index)" class="mt-0.5 text-red-500 font-black hover:text-red-700 text-sm">✕</button>
                                                 </span>
                                                 </div>
                                             </div>
                                             <div v-if="activeCard === 'Word' && words.length !== 0" class="flex items-center gap-2">
-                                                <input v-model="newWord" placeholder="Введите новое слово" class="border rounded px-3 py-2 w-full">
-                                                <button @click="addNewWord" class="bg-gray-600 transition-all ease-in-out duration-500
+                                                <input v-model="newWord" placeholder="Введите новое слово" class="roboto border rounded px-3 py-2 w-full">
+                                                <button @click="addNewWord" class="roboto bg-gray-600 transition-all ease-in-out duration-500
                                                  font-medium text-white px-4 py-2 rounded hover:bg-gray-950">Добавить</button>
                                             </div>
                                             <!--Выполняемое действие-->
                                             <div v-if="activeCard === 'Action'" class="flex justify-between gap-4 w-full">
                                                 <div class="w-6/12 flex flex-col gap-1">
-                                                    <label for="name" class="text-base text-gray-800 font-semibold w-full">Выполняемое действие</label>
+                                                    <label for="name" class="roboto text-base text-gray-800 font-semibold w-full">Выполняемое действие</label>
                                                     <textarea v-model="action"
-                                                              class="scroll-container w-full min-h-[20rem] max-h-[20rem] h-40 p-4 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"
-                                                              placeholder="Введите описание к ответу (дополнение)..."
+                                                              class="roboto scroll-container w-full min-h-[20rem] max-h-[20rem] h-40 p-4 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"
+                                                              placeholder="Введите описание действия (что нужно сделать)..."
                                                     ></textarea>
                                                     <div class="text-sm text-gray-500 mt-1">
                                                         <code>**</code> – жирный, <code>*</code> – курсив, <code>~~</code> – зачёркнутый, <code>__</code> - жирный,
@@ -90,7 +90,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="w-6/12">
-                                                    <h3 class="font-semibold text-gray-700">Предпросмотр:</h3>
+                                                    <h3 class="roboto font-semibold text-gray-700">Предпросмотр:</h3>
                                                     <div class="scroll-container overflow-y-scroll mt-1 h-[20rem] p-4 border rounded bg-gray-50 break-words">
                                                         <div class="max-w-none prose prose-sm" v-html="compiledMarkdownAction"></div>
                                                     </div>
@@ -99,9 +99,9 @@
                                             <!--Вопрос-->
                                             <div v-if="activeCard !== 'Specializations' && activeCard !== 'Action' && activeCard !== 'Lucky' && activeCard !== 'Word'" class="flex items-start justify-between gap-4 w-full">
                                                 <div class="w-6/12 flex flex-col gap-1">
-                                                    <label for="name" class="text-base text-gray-800 font-semibold w-full">Вопрос</label>
+                                                    <label for="name" class="roboto text-base text-gray-800 font-semibold w-full">Вопрос</label>
                                                     <textarea v-model="question"
-                                                              class="scroll-container w-full min-h-[20rem] max-h-[20rem] h-40 p-4 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"
+                                                              class="roboto scroll-container w-full min-h-[20rem] max-h-[20rem] h-40 p-4 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"
                                                               placeholder="Напишите вопрос..."
                                                     ></textarea>
                                                     <div class="text-sm text-gray-500 mt-1">
@@ -110,7 +110,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="w-6/12">
-                                                    <h3 class="font-semibold text-gray-700">Предпросмотр:</h3>
+                                                    <h3 class="roboto font-semibold text-gray-700">Предпросмотр:</h3>
                                                     <div class="scroll-container overflow-y-scroll mt-1 h-[20rem] p-4 border rounded bg-gray-50 break-words">
                                                         <div class="max-w-none prose prose-sm" v-html="compiledMarkdownQuestion"></div>
                                                     </div>
@@ -119,10 +119,10 @@
                                             <!--Описание к ответу-->
                                             <div v-if="activeCard !== 'Specializations' && activeCard !== 'Action' && activeCard !== 'Lucky' && activeCard !== 'Found'" class="flex items-start justify-between gap-4 w-full">
                                                 <div class="w-6/12 flex flex-col gap-1">
-                                                    <label v-if="activeCard !== 'Word'" for="name" class="text-base text-gray-800 font-semibold w-full">Описание к ответу</label>
-                                                    <label v-else for="name" class="text-base text-gray-800 font-semibold w-full">Описание слова</label>
+                                                    <label v-if="activeCard !== 'Word'" for="name" class="roboto text-base text-gray-800 font-semibold w-full">Описание к ответу</label>
+                                                    <label v-else for="name" class="roboto text-base text-gray-800 font-semibold w-full">Описание слова</label>
                                                     <textarea v-model="explanation"
-                                                              class="scroll-container w-full min-h-[14rem] max-h-[14rem] h-40 p-4 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"
+                                                              class="roboto scroll-container w-full min-h-[14rem] max-h-[14rem] h-40 p-4 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"
                                                               :placeholder="activeCard !== 'Word' ? 'Введите описание к ответу (дополнение)...': 'Введите описание слова'"
                                                     ></textarea>
                                                     <div class="text-sm text-gray-500 mt-1">
@@ -131,7 +131,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="w-6/12">
-                                                    <h3 class="font-semibold text-gray-700">Предпросмотр:</h3>
+                                                    <h3 class="roboto font-semibold text-gray-700">Предпросмотр:</h3>
                                                     <div class="scroll-container overflow-y-scroll mt-1 h-[14rem] p-4 border rounded bg-gray-50 break-words">
                                                         <div class="max-w-none prose prose-sm" v-html="compiledMarkdownExplanation"></div>
                                                     </div>
@@ -141,30 +141,28 @@
                                             <div v-if="activeCard !== 'Specializations' && activeCard !== 'Word' && activeCard !== 'Found'" class="flex w-full items-center justify-between gap-4">
                                                 <!--Ответ-->
                                                 <div v-if="activeCard !== 'Action' && activeCard !== 'Lucky' && activeCard !== 'TF'" class="flex w-6/12 justify-between items-center">
-                                                    <label for="name" class="text-base text-gray-800 font-semibold w-2/12">Ответ:</label>
+                                                    <label for="name" class="roboto text-base text-gray-800 font-semibold w-2/12">Ответ:</label>
                                                     <input v-model="answer"
-                                                           class="w-10/12 px-4 py-2 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"
+                                                           class="roboto w-10/12 px-4 py-2 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"
                                                            placeholder="Введите ответ...">
                                                 </div>
                                                 <!--Правда или ложь на вопрос-->
                                                 <div v-if="activeCard === 'TF'" class="flex w-6/12 items-center justify-between">
-                                                    <label for="story" class="text-base font-medium">Ответ: {{answerTF}}</label>
+                                                    <label for="story" class="roboto text-base font-medium">Ответ: {{answerTF}}</label>
                                                     <div class="flex gap-[0.45rem]">
                                                         <button :class="[answerTF === true ? 'bg-green-400 border border-gray-800' : 'border border-gray-800 bg-white text-gray-800 hover:bg-gray-50',
-                                                 'px-3 py-1 rounded transition-all duration-300 font-medium']"
-                                                                @click="checkAnswer(true)"
+                                                                'roboto px-3 py-1 rounded transition-all duration-300 font-medium']" @click="checkAnswer(true)"
                                                         >T</button>
                                                         <button :class="[answerTF === false ? 'bg-red-400 border border-gray-800' : 'border border-gray-800 bg-white text-gray-800 hover:bg-gray-50',
-                                                 'px-3 py-1 rounded transition-all duration-300 font-medium']"
-                                                                @click="checkAnswer(false)"
+                                                                'roboto px-3 py-1 rounded transition-all duration-300 font-medium']" @click="checkAnswer(false)"
                                                         >F</button>
                                                     </div>
                                                 </div>
                                                 <!--Количество очков-->
-                                                <div :class="activeCard === 'Action' || activeCard === 'Lucky' ? 'w-full' : 'w-6/12'" class="flex items-center justify-between">
+                                                <div :class="activeCard === 'Action' || activeCard === 'Lucky' ? 'w-full' : 'w-6/12'" class="roboto flex items-center justify-between">
                                                     <div class="flex gap-2">
-                                                        <label for="story" class="text-base font-medium">Количество очков:</label>
-                                                        <input v-model="points" disabled type="number" class="text-center w-16 font-bold bg-white cursor-no-drop rounded ps-2.5 text-base">
+                                                        <label for="story" class="roboto text-base font-medium">Количество очков:</label>
+                                                        <input v-model="points" disabled type="number" class="roboto text-center w-16 font-bold bg-white cursor-no-drop rounded ps-2.5 text-base">
                                                     </div>
 
                                                     <div class="flex gap-2">
@@ -205,9 +203,9 @@
                                             </div>
                                             <!--Тип генерации вопросов-->
                                             <div v-if="activeCard === 'Specializations'" class="flex flex-col w-full gap-2">
-                                                <label for="" class="text-base text-gray-800 font-semibold w-full">Тип генерации</label>
+                                                <label for="" class="roboto font-normal text-base text-gray-800 w-full">Тип генерации</label>
                                                 <div class="relative gap-2">
-                                                    <div @click="isDropdownOpen = !isDropdownOpen" class="flex border border-gray-800 font-medium justify-between items-center bg-[#f3f4f6] custom-select rounded
+                                                    <div @click="isDropdownOpen = !isDropdownOpen" class="roboto flex border border-gray-800 font-medium justify-between items-center bg-[#f3f4f6] custom-select rounded
                                                         text-base p-2 w-full cursor-pointer">
                                                         {{ selectedType.type || 'Выберите тип получения вопросов' }}
                                                         <ChevronUpIcon class="col-start-1 row-start-1 size-6 mt-0.5 self-center justify-self-end text-gray-500 sm:size-5 rotate-180" aria-hidden="true"/>
@@ -217,7 +215,7 @@
                                                     <div v-show="isDropdownOpen" class="w-full border border-black rounded mt-2 bg-fuchsia-50 transition-all duration-500">
                                                         <div v-for="type in typeGenerations" :key="type.id"
                                                              @click="isDropdownOpen = !isDropdownOpen; selectedType = type"
-                                                             class="option font-medium p-2 hover:bg-fuchsia-300 cursor-pointer text-sm text-gray-950">
+                                                             class="roboto option font-medium p-2 hover:bg-fuchsia-300 cursor-pointer text-sm text-gray-950">
                                                             {{ type.type }}
                                                         </div>
                                                     </div>
@@ -228,7 +226,7 @@
                                                     <!-- Заголовок селекта -->
                                                 <div
                                                     @click="isDropdownOpen = !isDropdownOpen"
-                                                    class="flex border border-gray-800 font-medium justify-between items-center bg-[#f3f4f6] custom-select rounded
+                                                    class="roboto flex border border-gray-800 font-medium justify-between items-center bg-[#f3f4f6] custom-select rounded
                                                        text-base p-2 w-full cursor-pointer">
                                                     {{ displaySelectedText }}
                                                     <ChevronUpIcon class="col-start-1 row-start-1 size-6 mt-0.5 self-center justify-self-end text-gray-500 sm:size-5 rotate-180" aria-hidden="true"/>
@@ -239,7 +237,7 @@
                                                     class="scroll-smooth md:scroll-auto w-full border border-black rounded mt-2 bg-fuchsia-50 transition-all max-h-48 duration-500 overflow-y-scroll">
                                                     <div v-if="specializations.length > 1"
                                                         @click.stop="allSpecialization(); isDropdownOpen = !isDropdownOpen"
-                                                        class="option font-medium p-2 hover:bg-fuchsia-300 cursor-pointer text-sm text-gray-950">
+                                                        class="roboto option font-medium p-2 hover:bg-fuchsia-300 cursor-pointer text-sm text-gray-950">
                                                         Все специальности
                                                         <span v-if="selectedSpecialization.includes(0)">✅</span>
                                                     </div>
@@ -247,7 +245,7 @@
                                                         v-for="spec in specializations"
                                                         :key="spec.id"
                                                         @click.stop="toggleSpecialization(spec.id)"
-                                                        class="option font-medium p-2 hover:bg-fuchsia-300 cursor-pointer text-sm text-gray-950">
+                                                        class="roboto option font-medium p-2 hover:bg-fuchsia-300 cursor-pointer text-sm text-gray-950">
                                                         {{ spec.name }}
                                                         <span v-if="selectedSpecialization.includes(spec.id)">✅</span>
                                                     </div>
@@ -258,9 +256,9 @@
                                 </div>
                             </div>
                             <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 rounded-b-xl">
-                                <button v-if="activeCard === 'Word' && !generating" type="button" class="inline-flex w-full justify-center rounded-md bg-[#24262C] px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-[#24262C] sm:ml-3 sm:w-auto" @click="componentsMap[activeCard].generate">Сгенерировать слова</button>
-                                <button v-else type="button" class="inline-flex w-full justify-center rounded-md bg-[#24262C] px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-[#24262C] sm:ml-3 sm:w-auto" @click="componentsMap[activeCard].create">Добавить {{componentsMap[activeCard].name }}</button>
-                                <button type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto" @click="openCreate = false" ref="cancelButtonRef">Отмена</button>
+                                <button v-if="activeCard === 'Word' && !generating" type="button" class="roboto font-normal inline-flex w-full justify-center rounded-md bg-[#24262C] px-3 py-2 text-sm text-white shadow-xs hover:bg-[#24262C] sm:ml-3 sm:w-auto" @click="componentsMap[activeCard].generate">Сгенерировать слова</button>
+                                <button v-else type="button" class="roboto font-normal inline-flex w-full justify-center rounded-md bg-[#24262C] px-3 py-2 text-sm text-white shadow-xs hover:bg-[#24262C] sm:ml-3 sm:w-auto" @click="componentsMap[activeCard].create">Добавить {{componentsMap[activeCard].name }}</button>
+                                <button type="button" class="roboto font-normal mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm  text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto" @click="openCreate = false" ref="cancelButtonRef">Отмена</button>
                             </div>
                         </DialogPanel>
                     </TransitionChild>
@@ -282,12 +280,12 @@
                             <div class="bg-white border-b border-gray-300 rounded-t-xl px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                 <div class="sm:flex sm:items-start">
                                     <div class="mt-3 w-full text-center sm:mt-0 sm:text-left">
-                                        <DialogTitle as="h3" class="text-3xl font-black text-gray-800 text-center">Изменить {{componentsMap[activeCard.name]}}</DialogTitle>
+                                        <DialogTitle as="h3" class="text-3xl font-black text-gray-800 text-center">Изменить {{ componentsMap[activeCard].name }}</DialogTitle>
                                         <form @submit.prevent class="flex flex-col gap-5 mt-6">
                                             <!--Название специальности-->
                                             <div v-if="activeCard === 'Specializations' || activeCard === 'Word'" class="flex flex-col gap-2 w-full">
-                                                <label for="name" class="text-base text-gray-800 font-semibold w-full">{{ activeCard === 'Specializations' ? 'Название специальности' : 'Слово'}}</label>
-                                                <input v-model="name" id="name" class="text-base text-gray-950 font-medium border border-gray-800 bg-[#f3f4f6] w-full rounded px-3 py-2">
+                                                <label for="name" class="roboto text-base text-gray-800 font-normal w-full">{{ activeCard === 'Specializations' ? 'Название специальности' : 'Слово'}}</label>
+                                                <input v-model="name" id="name" class="roboto text-base text-gray-950 font-medium border border-gray-800 bg-[#f3f4f6] w-full rounded px-3 py-2">
                                             </div>
                                             <!--Отображение генерируемых слов-->
                                             <div v-if="activeCard === 'Word' && startGenerating === true" class="">
@@ -299,9 +297,9 @@
                                                     </svg>
                                                 </div>
                                                 <!--Сгенерированные слова-->
-                                                <div v-else-if="words.length !== 0" class="flex w-full overflow-y-scroll scroll-container h-max max-h-[24rem] p-2 flex-wrap gap-2">
+                                                <div v-else-if="words.length !== 0" class="roboto flex w-full overflow-y-scroll scroll-container h-max max-h-[24rem] p-2 flex-wrap gap-2">
                                                     <span v-for="(word, index) in words" :key="index"
-                                                          class="bg-gray-200 text-gray-900 px-3 py-1 pt-0.5 rounded-full text-sm font-medium flex items-center gap-2">
+                                                          class="roboto bg-gray-200 text-gray-900 px-3 py-1 pt-0.5 rounded-full text-sm font-medium flex items-center gap-2">
                                                             {{ word }}
                                                         <button @click="removeWord(index)" class="mt-0.5 text-red-500 font-black hover:text-red-700 text-sm">✕</button>
                                                     </span>
@@ -309,16 +307,16 @@
                                             </div>
                                             <!--Добавление нового слова-->
                                             <div v-if="activeCard === 'Word' && words.length !== 0" class="flex items-center gap-2">
-                                                <input v-model="newWord" placeholder="Введите новое слово" class="border rounded px-3 py-2 w-full">
-                                                <button @click="addNewWord" class="bg-gray-600 transition-all ease-in-out duration-500
+                                                <input v-model="newWord" placeholder="Введите новое слово" class="roboto border rounded px-3 py-2 w-full">
+                                                <button @click="addNewWord" class="roboto bg-gray-600 transition-all ease-in-out duration-500
                                                  font-medium text-white px-4 py-2 rounded hover:bg-gray-950">Добавить</button>
                                             </div>
                                             <!--Выполняемое действие-->
                                             <div v-if="activeCard === 'Action'" class="flex justify-between gap-4 w-full">
                                                 <div class="w-6/12 flex flex-col gap-1">
-                                                    <label for="name" class="text-base text-gray-800 font-semibold w-full">Выполняемое действие</label>
+                                                    <label for="name" class="roboto text-base text-gray-800 font-semibold w-full">Выполняемое действие</label>
                                                     <textarea v-model="action"
-                                                              class="scroll-container w-full min-h-[20rem] max-h-[20rem] h-40 p-4 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"
+                                                              class="roboto scroll-container w-full min-h-[20rem] max-h-[20rem] h-40 p-4 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"
                                                               placeholder="Введите описание к ответу (дополнение)..."
                                                     ></textarea>
                                                     <div class="text-sm text-gray-500 mt-1">
@@ -336,9 +334,9 @@
                                             <!--Вопрос-->
                                             <div v-if="activeCard !== 'Specializations' && activeCard !== 'Action' && activeCard !== 'Lucky' && activeCard !== 'Word'" class="flex items-start justify-between gap-4 w-full">
                                                 <div class="w-6/12 flex flex-col gap-1">
-                                                    <label for="name" class="text-base text-gray-800 font-semibold w-full">Вопрос</label>
+                                                    <label for="name" class="roboto text-base text-gray-800 font-semibold w-full">Вопрос</label>
                                                     <textarea v-model="question"
-                                                              class="scroll-container w-full min-h-[20rem] max-h-[20rem] h-40 p-4 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"
+                                                              class="roboto scroll-container w-full min-h-[20rem] max-h-[20rem] h-40 p-4 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"
                                                               placeholder="Напишите вопрос..."
                                                     ></textarea>
                                                     <div class="text-sm text-gray-500 mt-1">
@@ -356,9 +354,9 @@
                                             <!--Описание к ответу-->
                                             <div v-if="activeCard !== 'Specializations' && activeCard !== 'Action' && activeCard !== 'Lucky' && activeCard !== 'Found'" class="flex items-start justify-between gap-4 w-full">
                                                 <div class="w-6/12 flex flex-col gap-1">
-                                                    <label for="name" class="text-base text-gray-800 font-semibold w-full">Описание к ответу</label>
+                                                    <label for="name" class="roboto text-base text-gray-800 font-semibold w-full">Описание к ответу</label>
                                                     <textarea v-model="explanation"
-                                                              class="scroll-container w-full min-h-[14rem] max-h-[14rem] h-40 p-4 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"
+                                                              class="roboto scroll-container w-full min-h-[14rem] max-h-[14rem] h-40 p-4 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"
                                                               placeholder="Введите описание к ответу (дополнение)..."
                                                     ></textarea>
                                                     <div class="text-sm text-gray-500 mt-1">
@@ -399,30 +397,28 @@
                                             <div v-if="activeCard !== 'Specializations' && activeCard !== 'Word' && activeCard !== 'Found'" class="flex w-full items-center justify-between gap-4">
                                                 <!--Ответ-->
                                                 <div v-if="activeCard !== 'Action' && activeCard !== 'Lucky' && activeCard !== 'TF'" class="flex w-6/12 justify-between items-center">
-                                                    <label for="name" class="text-base text-gray-800 font-semibold w-2/12">Ответ:</label>
+                                                    <label for="name" class="roboto text-base text-gray-800 font-semibold w-2/12">Ответ:</label>
                                                     <input v-model="answer"
-                                                           class="w-10/12 px-4 py-2 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"
+                                                           class="roboto w-10/12 px-4 py-2 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"
                                                            placeholder="Введите ответ...">
                                                 </div>
                                                 <!--Правда или ложь на вопрос-->
                                                 <div v-if="activeCard === 'TF'" class="flex w-6/12 items-center justify-between">
-                                                    <label for="story" class="text-base font-medium">Ответ: {{answerTF}}</label>
+                                                    <label for="story" class="roboto text-base font-medium">Ответ: {{answerTF}}</label>
                                                     <div class="flex gap-[0.45rem]">
                                                         <button :class="[answerTF === true ? 'bg-green-400 border border-gray-800' : 'border border-gray-800 bg-white text-gray-800 hover:bg-gray-50',
-                                                 'px-3 py-1 rounded transition-all duration-300 font-medium']"
-                                                                @click="checkAnswer(true)"
+                                                                'roboto px-3 py-1 rounded transition-all duration-300 font-medium']" @click="checkAnswer(true)"
                                                         >T</button>
                                                         <button :class="[answerTF === false ? 'bg-red-400 border border-gray-800' : 'border border-gray-800 bg-white text-gray-800 hover:bg-gray-50',
-                                                 'px-3 py-1 rounded transition-all duration-300 font-medium']"
-                                                                @click="checkAnswer(false)"
+                                                                'roboto px-3 py-1 rounded transition-all duration-300 font-medium']" @click="checkAnswer(false)"
                                                         >F</button>
                                                     </div>
                                                 </div>
                                                 <!--Количество очков-->
                                                 <div :class="activeCard === 'Action' || activeCard === 'Lucky' ? 'w-full' : 'w-6/12'" class="flex items-center justify-between">
                                                     <div class="flex gap-2">
-                                                        <label for="story" class="text-base font-medium">Количество очков:</label>
-                                                        <input v-model="points" disabled type="number" class="text-center w-16 font-bold bg-white cursor-no-drop rounded ps-2.5 text-base">
+                                                        <label for="story" class="roboto text-base font-medium">Количество очков:</label>
+                                                        <input v-model="points" disabled type="number" class="roboto text-center w-16 font-bold bg-white cursor-no-drop rounded ps-2.5 text-base">
                                                     </div>
 
                                                     <div class="flex gap-2">
@@ -441,9 +437,9 @@
                                             </div>
                                             <!--Тип генерации вопросов-->
                                             <div v-if="activeCard === 'Specializations'" class="flex flex-col w-full gap-2">
-                                                <label for="" class="text-base text-gray-800 font-semibold w-full">Тип генерации</label>
+                                                <label for="" class="text-base text-gray-800 font-normal roboto w-full">Тип генерации</label>
                                                 <div class="relative gap-3">
-                                                    <div @click="isDropdownOpen = !isDropdownOpen" class="flex border border-gray-800 font-medium justify-between items-center bg-[#f3f4f6] custom-select rounded
+                                                    <div @click="isDropdownOpen = !isDropdownOpen" class="roboto flex border border-gray-800 font-medium justify-between items-center bg-[#f3f4f6] custom-select rounded
                                                         text-base p-2 w-full cursor-pointer">
                                                         {{ selectedType.type || 'Выберите тип получения вопросов' }}
                                                         <ChevronUpIcon class="col-start-1 row-start-1 size-6 mt-0.5 self-center justify-self-end text-gray-500 sm:size-5 rotate-180" aria-hidden="true"/>
@@ -452,7 +448,7 @@
                                                     <div v-show="isDropdownOpen" class=" w-full border border-black rounded mt-2 bg-fuchsia-50 transition-all duration-500">
                                                         <div v-for="type in typeGenerations" :key="type.id"
                                                              @click="isDropdownOpen = !isDropdownOpen; selectedType = type"
-                                                             class="option font-medium p-2 hover:bg-fuchsia-300 cursor-pointer text-sm text-gray-950">
+                                                             class="roboto option font-medium p-2 hover:bg-fuchsia-300 cursor-pointer text-sm text-gray-950">
                                                             {{ type.type }}
                                                         </div>
                                                     </div>
@@ -463,7 +459,7 @@
                                                 <!-- Заголовок селекта -->
                                                 <div
                                                     @click="isDropdownOpen = !isDropdownOpen"
-                                                    class="flex border border-gray-800 font-medium justify-between items-center bg-[#f3f4f6] custom-select rounded
+                                                    class="roboto flex border border-gray-800 font-medium justify-between items-center bg-[#f3f4f6] custom-select rounded
                                                        text-base p-2 w-full cursor-pointer">
                                                     {{ displaySelectedText }}
                                                     <ChevronUpIcon class="col-start-1 row-start-1 size-6 mt-0.5 self-center justify-self-end text-gray-500 sm:size-5 rotate-180" aria-hidden="true"/>
@@ -472,7 +468,7 @@
                                                 <div v-show="isDropdownOpen" class="scroll-smooth md:scroll-auto w-full border border-black rounded mt-2 bg-fuchsia-50 transition-all max-h-48 duration-500 overflow-y-scroll">
                                                     <div v-if="specializations.length > 1"
                                                          @click.stop="allSpecialization(); isDropdownOpen = !isDropdownOpen"
-                                                         class="option font-medium p-2 hover:bg-fuchsia-300 cursor-pointer text-sm text-gray-950">
+                                                         class="roboto option font-medium p-2 hover:bg-fuchsia-300 cursor-pointer text-sm text-gray-950">
                                                         Все специальности
                                                         <span v-if="selectedSpecialization.includes(0)">✅</span>
                                                     </div>
@@ -480,7 +476,7 @@
                                                         v-for="spec in specializations"
                                                         :key="spec.id"
                                                         @click.stop="toggleSpecialization(spec.id)"
-                                                        class="option font-medium p-2 hover:bg-fuchsia-300 cursor-pointer text-sm text-gray-950">
+                                                        class="roboto option font-medium p-2 hover:bg-fuchsia-300 cursor-pointer text-sm text-gray-950">
                                                         {{ spec.name }}
                                                         <span v-if="selectedSpecialization.includes(spec.id)">✅</span>
                                                     </div>
@@ -491,9 +487,9 @@
                                 </div>
                             </div>
                             <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 rounded-b-xl">
-                                <button v-if="activeCard === 'Word' && generating === false" type="button" class="inline-flex w-full justify-center rounded-md bg-[#24262C] px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-[#24262C] sm:ml-3 sm:w-auto" @click="componentsMap[activeCard].generate">Сгенерировать слова</button>
-                                <button v-else  type="button" class="inline-flex w-full justify-center rounded-md bg-[#24262C] px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-[#24262C] sm:ml-3 sm:w-auto" @click="componentsMap[activeCard].update">Применить изменения</button>
-                                <button type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto" @click="openUpdate = false" ref="cancelButtonRef">Отмена</button>
+                                <button v-if="activeCard === 'Word' && generating === false" type="button" class="roboto font-normal inline-flex w-full justify-center rounded-md bg-[#24262C] px-3 py-2 text-sm text-white shadow-xs hover:bg-[#24262C] sm:ml-3 sm:w-auto" @click="componentsMap[activeCard].generate">Сгенерировать слова</button>
+                                <button v-else  type="button" class="roboto font-normal inline-flex w-full justify-center rounded-md bg-[#24262C] px-3 py-2 text-sm text-white shadow-xs hover:bg-[#24262C] sm:ml-3 sm:w-auto" @click="componentsMap[activeCard].update">Применить изменения</button>
+                                <button type="button" class="roboto font-normal mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto" @click="openUpdate = false" ref="cancelButtonRef">Отмена</button>
                             </div>
                         </DialogPanel>
                     </TransitionChild>
@@ -516,33 +512,33 @@
                                 <div class="sm:flex sm:items-start">
                                     <div class="mt-3 w-full text-center sm:mt-0 sm:text-left">
                                         <DialogTitle as="h3" class="text-3xl font-black text-gray-800 text-center">Удалить {{componentsMap[activeCard].name }}</DialogTitle>
-                                        <h2 v-if="activeCard === 'Specializations'" class="text-base font-normal mt-4 italic"><span class="font-bold text-lg not-italic">
+                                        <h2 v-if="activeCard === 'Specializations'" class="roboto text-base font-normal mt-4 italic"><span class="font-bold text-lg not-italic">
                                             Специальность:</span> <br> {{deleteItem.name}}
                                         </h2>
-                                        <h2 v-if="activeCard === 'Word'" class="text-base font-normal mt-4 italic"><span class="font-bold text-lg not-italic">
+                                        <h2 v-if="activeCard === 'Word'" class="roboto text-base font-normal mt-4 italic"><span class="font-bold text-lg not-italic">
                                             Слово:</span> <br> {{deleteItem.word}}
                                         </h2>
-                                        <div v-if="activeCard === 'Action'" class="text-base font-normal mt-4 italic"><span class="font-bold text-lg not-italic">
+                                        <div v-if="activeCard === 'Action'" class="roboto text-base font-normal mt-4 italic"><span class="font-bold text-lg not-italic">
                                             Действие:</span><br>
                                             <div class="scroll-container overflow-y-scroll mt-1 h-max p-4 border rounded bg-gray-50 break-words">
                                                 <div class="max-w-none prose prose-sm" v-html="compiledMarkdownAction"></div>
                                             </div>
                                         </div>
-                                        <div v-if="activeCard === 'TF' || activeCard === 'Decide' || activeCard === 'Question' || activeCard === 'Found'" class="text-base font-normal mt-4 italic"><span class="font-bold text-lg not-italic">
+                                        <div v-if="activeCard === 'TF' || activeCard === 'Decide' || activeCard === 'Question' || activeCard === 'Found'" class="text-base font-normal mt-4 italic"><span class="roboto font-bold text-lg not-italic">
                                             Вопрос:</span><br>
                                             <div class="scroll-container overflow-y-scroll mt-1 h-max p-4 border rounded bg-gray-50 break-words">
-                                                <div class="max-w-none prose prose-sm" v-html="compiledMarkdownQuestion"></div>
+                                                <div class="roboto max-w-none prose prose-sm" v-html="compiledMarkdownQuestion"></div>
                                             </div>
                                         </div>
-                                        <h2 v-if="activeCard !== 'Specializations' && activeCard !== 'Word' && activeCard !== 'Found'" class="text-base font-normal mt-4 italic"><span class="font-bold text-lg not-italic">
+                                        <h2 v-if="activeCard !== 'Specializations' && activeCard !== 'Word' && activeCard !== 'Found'" class="roboto text-base font-normal mt-4 italic"><span class="roboto font-bold text-lg not-italic">
                                             Очки:</span> <br> {{deleteItem.points}}
                                         </h2>
                                     </div>
                                 </div>
                             </div>
                             <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 rounded-b-xl">
-                                <button type="button" class="inline-flex w-full justify-center rounded-md bg-[#24262C] px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-[#24262C] sm:ml-3 sm:w-auto" @click="componentsMap[activeCard].del">Продолжить</button>
-                                <button type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto" @click="openDelete = false" ref="cancelButtonRef">Отмена</button>
+                                <button type="button" class="roboto inline-flex w-full justify-center rounded-md bg-[#24262C] px-3 py-2 text-sm font-normal text-white shadow-xs hover:bg-[#24262C] sm:ml-3 sm:w-auto" @click="componentsMap[activeCard].del">Продолжить</button>
+                                <button type="button" class="roboto mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-normal text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto" @click="openDelete = false" ref="cancelButtonRef">Отмена</button>
                             </div>
                         </DialogPanel>
                     </TransitionChild>
@@ -720,11 +716,11 @@ const toggleSpecialization = (id) => {
     }
 }
 const displaySelectedText = computed( () => {
-    if (selectedSpecialization.value.includes(0) && allSelected.value) return 'Выбраны все специальности'
-    if (selectedSpecialization.value.length === 0) return 'Выберите специальность'
-    if (selectedSpecialization.value.length === 1) {
+    if (selectedSpecialization.value.includes(0) || allSelected.value) return 'Выбраны все специальности'
+    else if (selectedSpecialization.value.length === 0) return 'Выберите специальность'
+    else if (selectedSpecialization.value.length === 1) {
         const spec = specializations.value.find(s => s.id === selectedSpecialization.value[0])
-        return spec?.name || '1 специальность'
+        return spec?.name || 'Выбрана 1 (одна) специальность'
     }
     return 'Выбрано несколько специальностей'
 });
@@ -1616,5 +1612,9 @@ defineExpose({
 
     .scroll-container::-webkit-scrollbar-thumb {
         transition: background-color 0.3s ease;
+    }
+
+    .roboto{
+        font-family: 'RobotoCondensed', sans-serif;
     }
 </style>
