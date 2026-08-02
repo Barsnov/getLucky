@@ -72,6 +72,7 @@ import Leaderboard from "./GameComponents/Leaderboard.vue";
 import Questions from "./GameComponents/Questions.vue";
 import Fight from "./GameComponents/Fight.vue";
 import {Howl} from "howler";
+import { useAudioStore } from '@/Stores/useAudioStore';
 
 export default {
     components: {Link, Questions, Leaderboard, GameUI, Head, Fight},
@@ -91,6 +92,11 @@ export default {
             default: ()=>({}),
             required: true
         }
+    },
+
+    setup() {
+        const audio = useAudioStore();
+        return { audio };
     },
 
     data() {
@@ -134,9 +140,7 @@ export default {
             defender: {},
 
             //Таймер
-            gameStartTime: Date.now(),
-            gameDuration: .2 * 60 * 1000, // 30 минут в миллисекундах
-            remainingTime: .2 * 60, // в секундах
+            remainingTime: 1 * 60, // 1800 секунд
             timerInterval: null,
             gameOver: false,
             //Очки за клетки
@@ -146,20 +150,8 @@ export default {
             //Конец игры
             timerGameEnd: false,
             isBlinking: false,
+        //Улучшение клетки
 
-            //Звук
-            playlist: [
-                '/sounds/Sneaky-Snitch.mp3',
-                '/sounds/Monkeys.mp3',
-                '/sounds/Fluffing-a-Duck.mp3',
-                '/sounds/Elevator-music.mp3',
-            ],
-
-            volumeBack: 0.1,
-            currentIndex: 0,
-            currentSound: null,
-
-            //Улучшение клетки
             forUpHex: false
         }
     },
@@ -169,6 +161,7 @@ export default {
             this.currentPlayer = player
             this.currentColor = player.color
         },
+
         startGame(){
             if (this.selectCard === false){
                 this.selectCard = !this.selectCard
@@ -186,6 +179,7 @@ export default {
                 }, 600)
             }
         },
+
         startSelectionAnimation(){
             let count = 0
             this.interval = setInterval(() => {
@@ -200,18 +194,24 @@ export default {
                     this.startPlayers = !this.startPlayers
                     // Через 1.5с убираем анимацию
                     setTimeout(() => {
+
+
+
                         this.visibleCard = !this.visibleCard
                         this.selectingCard = !this.selectingCard
                         this.startGameIf = true
                     }, 1000)
                 }
+
             }, 200)
         },
+
         //Логика с вопросами
         getQuestion(){
             this.getRandomQuestion();
             this.visibleQuestion = true
         },
+
         getRandomQuestion() {
             const categoryWeights = {
                 lucky: 0.05,           // 5%
@@ -263,12 +263,14 @@ export default {
             // Удаляем вопрос
             this[selectedCategory].splice(randomIndex, 1)
         },
+
         addPoints(playerId, points) {
             this.pointsPayload = { playerId, points };
             setTimeout(() => {
                 this.pointsPayload = null; // сброс, чтобы снова сработал watch
             }, 1000);
         },
+
         closeQuestion(bool, point){
             this.visibleQuestion = false
             if(bool){
@@ -278,6 +280,7 @@ export default {
             }
             this.$refs.gameUI.nextPlayerTurn();
         },
+
         splitQuestions(questions){
             this.action = questions.action || [];
             this.cardFound = questions.found || [];
@@ -294,6 +297,7 @@ export default {
             this.forUpHex = true;
             this.visibleQuestion = true;
         },
+
         closeQuestionForUpHex(bool, point){
             this.forUpHex = false;
             this.visibleQuestion = false
@@ -341,59 +345,36 @@ export default {
 
         //Конец игры + таймер
         startGameTimer() {
-            this.gameStartTime = Date.now();
+            // Устанавливаем время окончания (нереактивно)
+            const targetTime = Date.now() + this.remainingTime * 1000;
+
             this.timerInterval = setInterval(() => {
-                const elapsed = Math.floor((Date.now() - this.gameStartTime) / 1000);
-                this.remainingTime = Math.max(this.gameDuration / 1000 - elapsed, 0);
+                const now = Date.now();
+                const diff = Math.max(Math.floor((targetTime - now) / 1000), 0);
+
+                this.remainingTime = diff;
 
                 if (this.remainingTime <= 0 && !this.gameOver) {
+                    clearInterval(this.timerInterval)
                     this.isBlinking = true;
                     this.gameOver = true;
                     setTimeout(() => {
                         this.isBlinking = false;
                         this.endGame();
                     }, 3000); // 3 секунды мигания
-                }
+}
             }, 1000);
         },
         endGame() {
-            // Экран завершения и т.д.
-            this.timerGameEnd = true
-            this.stopPlaylist()
-            this.$refs.lead.getPLayers()
+
+            this.timerGameEnd = true;
+            this.audio.stopBgm(); // Просто и понятно
+            this.$refs.lead.getPLayers();
         },
         formatTime(seconds) {
             const m = String(Math.floor(seconds / 60)).padStart(2, '0');
             const s = String(seconds % 60).padStart(2, '0');
             return `${m}:${s}`;
-        },
-
-        //Звук в игре
-        playPlaylist () {
-            // Стоп старый если был
-            if (this.currentSound) {
-                this.currentSound.unload()
-            }
-
-            this.currentSound = new Howl({
-                src: [this.playlist[this.currentIndex]],
-                volume: this.volumeBack,
-                onend: () => {
-                    // Следующий трек
-                    this.currentIndex = (this.currentIndex + 1) % this.playlist.length
-                    this.playPlaylist()
-                },
-            })
-
-            this.currentSound.play()
-        },
-        stopPlaylist (){
-            if (this.currentSound) {
-                this.currentSound.stop()
-                this.currentSound.unload()
-                this.currentSound = null
-                this.currentIndex = 0
-            }
         }
     },
 
@@ -405,14 +386,15 @@ export default {
             immediate: true,
                 deep: true
         },
+        
+        startGameIf(newVal) {
+            if (newVal) {
+                    this.startGameTimer();
+                    this.audio.playBgm(); // Стартуем музыку
+                }
 
-        startGameIf:{
-            handler(newVal) {
-                if(newVal) this.startGameTimer();
-                this.playPlaylist();
-            },
-            immediate: true,
-            deep: true
+
+
         }
     },
     mounted(){

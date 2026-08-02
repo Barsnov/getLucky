@@ -160,6 +160,7 @@ const closeFight = (team) => {
     setTimeout(()=>{
         continueGame.value = false;
         checkAnswer.value = false;
+        flagButton.value = false
         errorMessage.value = '';
     }, 1000)
 }
@@ -267,7 +268,7 @@ const categoryGame = computed(() => {
                         Проверить ответ
                     </h1>
                     <!-- Блик -->
-                    <div class="absolute top-0 left-[-50%] w-[100%] h-full bg-white/20 transform rotate-[15deg] scale-150 transition-all blur-sm duration-1000 group-hover:left-[130%] pointer-events-none"></div>
+                    <div class="absolute top-0 left-[-40%] w-[70%] h-full bg-white/20 transform rotate-[35deg] scale-150 transition-all blur-sm duration-1000 group-hover:left-[90%] pointer-events-none"></div>
                 </div>
 
                 <!-- После проверки: "Пропустить" и "+ Очки" -->

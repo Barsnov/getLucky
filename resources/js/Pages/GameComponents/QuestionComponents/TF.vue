@@ -77,12 +77,12 @@ const closeQuestion = (bool) =>{
                             Проверить ответ
                         </h1>
                         <!-- Блик -->
-                        <div class="absolute top-0 left-[-50%] w-[100%] h-full bg-white/20 transform rotate-[15deg] scale-150 transition-all blur-sm duration-1000 group-hover:left-[130%] pointer-events-none"></div>
+                        <div class="absolute top-0 left-[-30%] w-[70%] h-full bg-white/20 transform rotate-[35deg] scale-150 transition-all blur-sm duration-1000 group-hover:left-[80%] pointer-events-none"></div>
                     </div>
 
                     <!-- После проверки: "Пропустить" и "+ Очки" -->
-                    <div :class="[checkAnswer ? 'opacity-100' : 'opacity-0 absolute -z-10', 'flex items-center gap-16']">
-                        <div class="relative overflow-hidden bg-gray-600 w-[29rem] text-center border-gray-800 border-b-[.6rem] hover:border-b-[.2rem] transition-all rounded-lg px-6 py-4 group"
+                    <div :class="[checkAnswer ? 'relative opacity-100' : 'opacity-0 absolute -z-10', 'flex items-center gap-16']">
+                        <div :class="[checkAnswer ? 'relative' : 'absolute']" class="relative overflow-hidden bg-gray-600 w-[29rem] text-center border-gray-800 border-b-[.6rem] hover:border-b-[.2rem] transition-all rounded-lg px-6 py-4 group"
                              @click="closeQuestion(false)" style="cursor: url('/icons/Point.png') 0 0, auto">
                             <h1 style="font-family: 'Barboskin', sans-serif;" class="text-3xl text-white">
                                 Команда ответила неправильно
@@ -91,7 +91,7 @@ const closeQuestion = (bool) =>{
                             <div class="absolute top-0 left-[-30%] w-[40%] h-full bg-white/80 transform rotate-[45deg] scale-125 transition-all duration-700 group-hover:left-[90%] pointer-events-none"></div>
                         </div>
 
-                        <div class="relative overflow-hidden bg-pink-500 w-[29rem] text-center border-gray-800 border-b-[.6rem] hover:border-b-[.2rem] transition-all rounded-lg px-6 py-4 group"
+                        <div :class="[checkAnswer ? 'relative' : 'absolute']" class="relative overflow-hidden bg-pink-500 w-[29rem] text-center border-gray-800 border-b-[.6rem] hover:border-b-[.2rem] transition-all rounded-lg px-6 py-4 group"
                              @click="closeQuestion(true)" style="cursor: url('/icons/Point.png') 0 0, auto">
                             <h1 style="font-family: 'Barboskin', sans-serif;" class="text-3xl text-white">
                                 Команда ответила правильно

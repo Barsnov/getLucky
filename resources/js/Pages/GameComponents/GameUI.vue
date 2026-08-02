@@ -12,8 +12,7 @@ import PurpleShape from "./Shape/PurpleShape.vue";
 import YellowShape from "./Shape/YellowShape.vue";
 import CameraAnimation from "./CameraAnimation.vue";
 import CrownShape from "./CrownShape.vue";
-//Звук
-import {Howl} from "howler";
+
 
 extend({ OrbitControls });
 const emit = defineEmits(['update-current-player', 'getQuestion', 'getFight', 'hexStatsUpdate', 'getQuestionForUpHex'])
@@ -24,60 +23,27 @@ const props = defineProps({
 })
 
 
-const highSound = new Howl({
-    src: ['/sounds/HighHex.mp3'],
-    volume: 0.3,
-})
-const attackSound = new Howl({
-    src: ['/sounds/Sword.wav'],
-    volume: 0.3,
-})
-const whooshCamera = new Howl({
-    src: ['/sounds/WhooshCamera.mp3'],
-    volume: 0.5,
-})
-const wrong = new Howl({
-    src: ['/sounds/Wrong.mp3'],
-    volume: 0.5,
-})
-const whipChip = new Howl({
-    src: ['/sounds/WhooshChip.flac'],
-    volume: 0.3,
-})
-const whooshHex = new Howl({
-    src: ['/sounds/WhipChip.wav'],
-    volume: 0.3,
-})
-const upgradeHex = new Howl({
-    src: ['/sounds/Upgrade.wav'],
-    volume: 0.3,
-})
-const shieldHex = new Howl({
-    src: ['/sounds/Shield.wav'],
-    volume: 0.3,
-})
+import { useAudioStore } from '@/Stores/useAudioStore';
 
-const playPointer = () => {
-    highSound.play()
-}
-const playWrong = () => {
-    wrong.play()
-}
-const playWhip = () => {
-    whipChip.play()
-}
-const playWhoosh = () => {
-    whooshHex.play()
-}
-const playAttack = () =>{
-    attackSound.play()
-}
-const playUpgrade = () => {
-    upgradeHex.play()
-}
-const playShield = () =>{
-    shieldHex.play()
-}
+const audio = useAudioStore();
+
+// Вызывов Howl методов:
+const playPointer = () => audio.playSfx('pointer');
+const playWrong = () => audio.playSfx('wrong');
+const playWhip = () => audio.playSfx('whip');
+const playWhoosh = () => audio.playSfx('hexAction');
+const playAttack = () => audio.playSfx('attack');
+const playUpgrade = () => audio.playSfx('upgrade');
+const playShield = () => audio.playSfx('shield');
+
+// В методе, где камера летит:
+watch(() => props.startGameIf, (newVal) => {
+    if (newVal) {
+        // ...
+        audio.playSfx('whoosh'); // Звук камеры
+        // ...
+    }
+});
 
 const hexGrid = ref([]);
 const isHexClickable = ref(true)
@@ -534,6 +500,14 @@ watch(() => props.startGameIf, (newVal)=>{
     }
 })
 
+const shapeMapping = {
+    0: RedShape
+    ,1: BlueShape
+    ,2: GreenShape
+    ,3: YellowShape
+    ,4: PurpleShape
+}
+
 const initPlayers = () => {
     const count = Number(props.players)
     allPlayers.value = Array.from({ length: count }, (_, i) => ({
@@ -619,28 +593,12 @@ defineExpose({
                 <TresMesh v-if="hex?.beamColor" :position="[hex.position.x, hex.position.y + .15, hex.position.z]" :geometry="beamGeometry" receive-shadow :material="beamMaterial(hex.beamColor)"/>
             </template>
 
-            <TresGroup v-if="Number(props.players) === 2">
-                <Suspense><RedShape cast-shadow ref="redShape" :position="positionShape[0][0]"></RedShape></Suspense>
-                <Suspense><BlueShape cast-shadow ref="blueShape" :position="positionShape[0][1]"></BlueShape></Suspense>
+            <TresGroup v-for="(player, index) in props.players" :key="index">
+                <Suspense>
+                    <component :is="shapeMapping[index]" :position="positionShape[props.players-2][index]" cast-shadow/>
+                </Suspense>
             </TresGroup>
-            <TresGroup v-if="Number(props.players) === 3">
-                <Suspense><RedShape cast-shadow ref="redShape" :position="positionShape[1][0]"></RedShape></Suspense>
-                <Suspense><BlueShape cast-shadow ref="blueShape" :position="positionShape[1][1]"></BlueShape></Suspense>
-                <Suspense><GreenShape cast-shadow ref="greenShape" :position="positionShape[1][2]"></GreenShape></Suspense>
-            </TresGroup>
-            <TresGroup v-if="Number(props.players) === 4">
-                <Suspense><RedShape cast-shadow ref="redShape" :position="positionShape[2][0]"></RedShape></Suspense>
-                <Suspense><BlueShape cast-shadow ref="blueShape" :position="positionShape[2][1]"></BlueShape></Suspense>
-                <Suspense><GreenShape cast-shadow ref="greenShape" :position="positionShape[2][2]"></GreenShape></Suspense>
-                <Suspense><YellowShape cast-shadow ref="redShape" :position="positionShape[2][3]"></YellowShape></Suspense>
-            </TresGroup>
-            <TresGroup v-if="Number(props.players) === 5">
-                <Suspense><RedShape cast-shadow ref="redShape" :position="positionShape[3][0]"></RedShape></Suspense>
-                <Suspense><BlueShape cast-shadow ref="blueShape" :position="positionShape[3][1]"></BlueShape></Suspense>
-                <Suspense><GreenShape cast-shadow ref="greenShape" :position="positionShape[3][2]"></GreenShape></Suspense>
-                <Suspense><YellowShape cast-shadow ref="yellowShape" :position="positionShape[3][3]"></YellowShape></Suspense>
-                <Suspense><PurpleShape cast-shadow ref="purpleShape" :position="positionShape[3][4]"></PurpleShape></Suspense>
-            </TresGroup>
+
         </TresGroup>
         <BloomScene></BloomScene>
     </TresCanvas>

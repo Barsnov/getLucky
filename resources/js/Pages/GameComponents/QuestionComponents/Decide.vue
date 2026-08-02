@@ -62,7 +62,7 @@ const closeQuestion = (bool) =>{
         <div class="flex w-10/12 justify-center">
             <div class="w-11/12 flex flex-col items-center justify-center gap-1">
                 <div class="prose prose-lg border-black/80 bg-gray-100 border-[.2rem] px-5 py-3 rounded-lg break-words max-w-none" v-html="renderMarkdown(question.question)"></div>
-                <div :class="checkAnswer ? 'opacity-100 relative' : 'opacity-0 absolute -z-10'" style="font-family: 'RobotoCondensed', sans-serif;" class="text-[1.8rem] text-justify font-bold border-black/80 bg-gray-100 border-[.2rem] px-10 py-3 rounded-lg break-words">Ответ: <span style="font-family: 'RobotoCondensed', sans-serif;" class="font-normal">{{question.answer}}</span></div>
+                <div :class="checkAnswer ? 'opacity-100 relative' : 'opacity-100 absolute -z-10'" style="font-family: 'RobotoCondensed', sans-serif;" class="text-[1.8rem] text-justify font-bold border-black/80 bg-gray-100 border-[.2rem] px-10 py-3 rounded-lg break-words">Ответ: <span style="font-family: 'RobotoCondensed', sans-serif;" class="font-normal">{{question.answer}}</span></div>
                 <div style="font-family: 'Barboskin', sans-serif" class="w-max rounded-sm py-1 px-4 text-white text-3xl font-medium bg-black/80 prose break-words text-center">
                     {{question.points}} очков
                 </div>
@@ -82,7 +82,7 @@ const closeQuestion = (bool) =>{
 
                     <!-- После проверки: "Пропустить" и "+ Очки" -->
                     <div :class="[checkAnswer ? 'opacity-100' : 'opacity-0 absolute -z-10', 'flex items-center gap-16']">
-                        <div class="relative overflow-hidden bg-gray-600 w-[29rem] text-center border-gray-800 border-b-[.6rem] hover:border-b-[.2rem] transition-all rounded-lg px-6 py-4 group"
+                        <div :class="[checkAnswer ? 'relative' : 'absolute']" class="overflow-hidden bg-gray-600 w-[29rem] text-center border-gray-800 border-b-[.6rem] hover:border-b-[.2rem] transition-all rounded-lg px-6 py-4 group"
                              @click="closeQuestion(false)" style="cursor: url('/icons/Point.png') 0 0, auto">
                             <h1 style="font-family: 'Barboskin', sans-serif;" class="text-3xl text-white">
                                 Команда ответила неправильно
@@ -91,7 +91,7 @@ const closeQuestion = (bool) =>{
                             <div class="absolute top-0 left-[-30%] w-[40%] h-full bg-white/80 transform rotate-[45deg] scale-125 transition-all duration-700 group-hover:left-[90%] pointer-events-none"></div>
                         </div>
 
-                        <div class="relative overflow-hidden bg-pink-500 w-[29rem] text-center border-gray-800 border-b-[.6rem] hover:border-b-[.2rem] transition-all rounded-lg px-6 py-4 group"
+                        <div :class="[checkAnswer ? 'relative' : 'absolute']" class="overflow-hidden bg-pink-500 w-[29rem] text-center border-gray-800 border-b-[.6rem] hover:border-b-[.2rem] transition-all rounded-lg px-6 py-4 group"
                              @click="closeQuestion(true)" style="cursor: url('/icons/Point.png') 0 0, auto">
                             <h1 style="font-family: 'Barboskin', sans-serif;" class="text-3xl text-white">
                                 Команда ответила правильно

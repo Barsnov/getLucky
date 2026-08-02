@@ -67,15 +67,22 @@ const closeQuestion = (bool) =>{
                 <div class="absolute flex items-center gap-16" style="bottom: 2rem;">
                     <!-- После проверки: "Пропустить" и "+ Очки" -->
                     <div class="flex items-center gap-16">
-                        <div class="bg-gray-600 w-[29rem] text-center border-gray-800 border-b-[.6rem] hover:border-b-[.2rem] transition-all rounded-lg px-6 py-4"
-                             @click="closeQuestion(false)"
-                             style="cursor: url('/icons/Point.png') 0 0, auto">
-                            <h1 style="font-family: 'Barboskin', sans-serif;" class="text-3xl text-white">Команда не выполнила действие</h1>
+                        <div class="relative overflow-hidden bg-gray-600 w-[29rem] text-center border-gray-800 border-b-[.6rem] hover:border-b-[.2rem] transition-all rounded-lg px-6 py-4 group"
+                             @click="closeQuestion(false)" style="cursor: url('/icons/Point.png') 0 0, auto">
+                            <h1 style="font-family: 'Barboskin', sans-serif;" class="text-3xl text-white">
+                                Команда не выполнила действие
+                            </h1>
+                            <!-- Блик -->
+                            <div class="absolute top-0 left-[-30%] w-[40%] h-full bg-white/80 transform rotate-[45deg] scale-125 transition-all duration-700 group-hover:left-[90%] pointer-events-none"></div>
                         </div>
-                        <div class="bg-pink-500 w-[29rem] text-center border-gray-800 border-b-[.6rem] hover:border-b-[.2rem] transition-all rounded-lg px-6 py-4"
-                             @click="closeQuestion(true)"
-                             style="cursor: url('/icons/Point.png') 0 0, auto">
-                            <h1 style="font-family: 'Barboskin', sans-serif;" class="text-3xl text-white">Команда выполнила действие</h1>
+
+                        <div class="relative overflow-hidden bg-pink-500 w-[29rem] text-center border-gray-800 border-b-[.6rem] hover:border-b-[.2rem] transition-all rounded-lg px-6 py-4 group"
+                             @click="closeQuestion(true)" style="cursor: url('/icons/Point.png') 0 0, auto">
+                            <h1 style="font-family: 'Barboskin', sans-serif;" class="text-3xl text-white">
+                                Команда выполнила действие
+                            </h1>
+                            <!-- Блик -->
+                            <div class="absolute top-0 left-[-30%] w-[40%] h-full bg-white/80 transform rotate-[45deg] scale-125 transition-all duration-700 group-hover:left-[90%] pointer-events-none"></div>
                         </div>
                     </div>
                 </div>

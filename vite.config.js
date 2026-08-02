@@ -11,18 +11,17 @@ export default defineConfig({
         }),
         vue(
             {
-                // Other config
+                // Config for Tres.js
                 ...templateCompilerOptions,
             }
         ),
     ],
 
     server: {
-        host: '0.0.0.0',  // Достcуп с сети
-        port: 8001,       // Порт для Vite
-        strictPort: true,
+        host: '0.0.0.0',
         hmr: {
-            host: '192.168.0.11', // ipconfig
-        }
-    }
+            host: 'localhost',
+        },
+        cors: true, // Разрешаем CORS-запросы
+    },
 });

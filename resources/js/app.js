@@ -3,7 +3,9 @@ import '../../public/css/fonts.css'
 import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
 import { register } from 'swiper/element/bundle';
+import { createPinia } from 'pinia';
 
+const pinia = createPinia()
 register(); // Регистрация Custom Elements
 
 createInertiaApp({
@@ -14,6 +16,7 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
+            .use(pinia)
             .mount(el)
     },
 })
