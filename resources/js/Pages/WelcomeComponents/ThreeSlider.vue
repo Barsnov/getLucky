@@ -1,100 +1,107 @@
-<template>
-    <Head title="Название игрушки (либо мб ход команд описывать?)"/>
-    <!--Нужно описать загрузку самой карты в случае если я буду генерировать вопросы-->
-    <div ref="load" class="w-screen h-screen" style="opacity: 0; transition: 1s">
-        <loading :questions="questions" @nextPage="nextPage" :players="players" :specialization="specialization" :progress="progress"></loading>
-    </div>
-</template>
+<script setup lang="ts">
+import { onMounted, onUnmounted, ref } from 'vue';
+import { Head } from '@inertiajs/vue3';
+import axios from 'axios';
+import Loading from './Loading.vue';
+import type { RawQuestionsPayload, Specialization } from '@/Types/cards';
 
-<script>
-import {Head} from "@inertiajs/vue3";
-import Loading from "./Loading.vue";
-import axios from 'axios'
+const props = withDefaults(
+    defineProps<{
+        players: number;
+        specialization: Specialization;
+    }>(),
+    {
+        players: 2,
+    }
+);
 
-export default {
-    components: {Loading, Head},
-    emits: ['nextPage'],
-    name: "Game",
-    props:{
-        players:{
-            type: Number,
-            default: 2,
-            required: true
-        },
-        specialization:{
-            type: Object,
-            default: ()=>({}),
-            required: true
+const emit = defineEmits<{
+    (e: 'nextPage'): void;
+}>();
+
+const visible = ref(false);
+const progress = ref(0);
+const questions = ref<RawQuestionsPayload | null>(null);
+const generatedQuestions = ref<RawQuestionsPayload[]>([]);
+
+let progressIntervalId: ReturnType<typeof setInterval> | null = null;
+let startTimeoutId: ReturnType<typeof setTimeout> | null = null;
+
+const generatorUrl =
+    import.meta.env.VITE_GENERATOR_API_URL || 'http://192.168.100.183:8000/generate';
+
+async function loadGeneratedQuestions(): Promise<void> {
+    const minQuestions = 10;
+    let loaded = 0;
+
+    while (generatedQuestions.value.length < minQuestions) {
+        try {
+            const res = await axios.get(generatorUrl, {
+                params: { specialization: props.specialization.name },
+            });
+            const rawBlock = res.data.question?.split('```')[1] ?? res.data.question;
+            const parsed = JSON.parse(rawBlock) as RawQuestionsPayload;
+
+            generatedQuestions.value.push(parsed);
+            loaded++;
+            progress.value = Math.floor((loaded / minQuestions) * 100);
+        } catch (error) {
+            console.error('Ошибка генерации вопроса:', error);
+            break;
         }
-    },
+    }
 
-    data() {
-        return {
-            isLoading: true,
-            progress: 0,
-            questions: null,
-            generatedQuestions: []
-        }
-    },
-
-    methods: {
-        async loadGeneratedQuestions() {
-            const minQuestions = 10
-            let loaded = 0
-
-            while (this.generatedQuestions.length < minQuestions) {
-                try {
-                    const res = await axios.get("http://192.168.100.183:8000/generate", {
-                        params: { specialization: this.specialization.name }
-                    })
-                    console.log(res.data.question)
-                    res.data.question = res.data.question?.split('```')[1]
-                    console.log(res.data.question)
-                    const data = JSON.parse(res.data.question)
-
-                    this.generatedQuestions.push(data)
-                    loaded++
-                    this.progress = Math.floor((loaded / minQuestions) * 100)
-                } catch (error) {
-                    console.error('Ошибка генерации вопроса:', error)
-                    break
-                }
-            }
-
-            // После загрузки первых вопросов
-            this.questions = this.generatedQuestions[0]
-            this.isLoading = false
-        },
-
-        nextPage(){
-            this.$emit('nextPage')
-        }
-    },
-
-
-    mounted() {
-        setTimeout(()=>{
-            this.$refs.load.style.opacity = '1';
-            if (this.specialization.method === 0) {
-                // Табличные категории — загружаем быстро
-                axios.get(`/questions/get/${this.specialization.id}`)
-                    .then(res => {
-                        this.questions = res.data
-                        setInterval(()=>{this.progress < 100 ? this.progress ++ : ''}, 100)
-                        this.isLoading = false
-                    })
-                    .catch(() => {
-                        this.isLoading = false
-                    })
-            } else {
-                // Генерация — прогресс загрузки
-                this.loadGeneratedQuestions()
-            }
-        }, 1000)
-    },
+    questions.value = generatedQuestions.value[0] ?? {};
 }
+
+function nextPage(): void {
+    emit('nextPage');
+}
+
+onMounted(() => {
+    startTimeoutId = setTimeout(() => {
+        visible.value = true;
+        if (props.specialization.method === 0) {
+            axios
+                .get<RawQuestionsPayload>(`/questions/get/${props.specialization.id}`)
+                .then((res) => {
+                    questions.value = res.data;
+                    progressIntervalId = setInterval(() => {
+                        if (progress.value < 100) {
+                            progress.value++;
+                        } else if (progressIntervalId) {
+                            clearInterval(progressIntervalId);
+                            progressIntervalId = null;
+                        }
+                    }, 100);
+                })
+                .catch((err) => {
+                    console.error('Ошибка загрузки вопросов:', err);
+                });
+        } else {
+            loadGeneratedQuestions();
+        }
+    }, 1000);
+});
+
+onUnmounted(() => {
+    if (progressIntervalId) clearInterval(progressIntervalId);
+    if (startTimeoutId) clearTimeout(startTimeoutId);
+});
 </script>
 
-<style scoped>
-
-</style>
+<template>
+    <Head title="Загрузка игры" />
+    <div
+        class="w-screen h-screen transition-opacity duration-1000"
+        :class="visible ? 'opacity-100' : 'opacity-0'"
+    >
+        <Loading
+            :questions="questions"
+            @nextPage="nextPage"
+            :players="players"
+            :specialization="specialization"
+            :progress="progress"
+        />
+    </div>
+</template>

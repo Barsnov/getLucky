@@ -25,8 +25,12 @@ class GameController extends Controller
         $questions = session('questions');
         $players = session('players');
 
+        if (!$questions || !$players) {
+            return redirect('/');
+        }
+
         return Inertia::render('Game', [
-            'players' => $players,
+            'players' => (int) $players,
             'questions' => $questions,
         ]);
     }
@@ -43,7 +47,7 @@ class GameController extends Controller
         $players = session('results');
 
         if (!$players) {
-            dd('ужас');
+            return redirect('/');
         }
 
         return Inertia::render('Podium', [

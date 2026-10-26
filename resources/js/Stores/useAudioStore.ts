@@ -30,6 +30,7 @@ export const useAudioStore = defineStore('audio', () => {
     
     const currentIndex = ref(0);
     const currentBgm = ref<Howl | null>(null);
+    const fadeInterval = ref<ReturnType<typeof setInterval> | null>(null);
 
     
     // --- ACTIONS ---
@@ -43,8 +44,16 @@ export const useAudioStore = defineStore('audio', () => {
         }
     };
 
+    const clearFade = () => {
+        if (fadeInterval.value) {
+            clearInterval(fadeInterval.value);
+            fadeInterval.value = null;
+        }
+    };
+
     // Управление плейлистом
     const playBgm = () => {
+        clearFade();
         if (currentBgm.value) currentBgm.value.unload();
 
         currentBgm.value = new Howl({
@@ -58,7 +67,46 @@ export const useAudioStore = defineStore('audio', () => {
         currentBgm.value.play();
     };
 
+    // Фоновая музыка стартового экрана (с плавным изменением громкости)
+    const playWelcomeBgm = () => {
+        clearFade();
+        if (currentBgm.value) currentBgm.value.unload();
+
+        let vol = 0.02;
+        currentBgm.value = new Howl({
+            src: ['/sounds/Elevator-music.mp3'],
+            volume: vol,
+            loop: true,
+        });
+        currentBgm.value.play();
+
+        fadeInterval.value = setInterval(() => {
+            if (vol < 0.2 && currentBgm.value) {
+                vol = Math.min(0.2, +(vol + 0.01).toFixed(2));
+                currentBgm.value.volume(vol);
+            } else {
+                clearFade();
+            }
+        }, 500);
+    };
+
+    const fadeWelcomeBgm = (targetVolume = 0.02, stepMs = 1000) => {
+        clearFade();
+        if (!currentBgm.value) return;
+
+        let vol = currentBgm.value.volume();
+        fadeInterval.value = setInterval(() => {
+            if (vol > targetVolume && currentBgm.value) {
+                vol = Math.max(targetVolume, +(vol - 0.01).toFixed(2));
+                currentBgm.value.volume(vol);
+            } else {
+                clearFade();
+            }
+        }, stepMs);
+    };
+
     const stopBgm = () => {
+        clearFade();
         if (currentBgm.value) {
             currentBgm.value.stop();
             currentBgm.value.unload();
@@ -71,6 +119,8 @@ export const useAudioStore = defineStore('audio', () => {
         bgmVolume, 
         playSfx, 
         playBgm, 
+        playWelcomeBgm,
+        fadeWelcomeBgm,
         stopBgm 
     };
 });
